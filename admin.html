@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&#22270;&#29255;&#31649;&#29702;&#21518;&#21488;</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      color: #0f1111;
+      background: #f6f7f7;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    a {
+      color: #007185;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .topbar {
+      background: #131921;
+      color: #fff;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .topbar a {
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 20px auto 48px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0 0 8px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 12px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .muted {
+      color: #565959;
+      font-size: 14px;
+    }
+
+    .notice {
+      background: #fff8e6;
+      border: 1px solid #f0c14b;
+      border-radius: 6px;
+      padding: 12px;
+      color: #4d3b00;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    .product-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .product-tab {
+      border: 1px solid #d5d9d9;
+      background: #f7fafa;
+      border-radius: 7px;
+      padding: 10px 15px;
+      cursor: pointer;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .product-tab.active {
+      border-color: #007185;
+      background: #fff;
+      box-shadow: inset 0 3px 0 #ff9900;
+      font-weight: 700;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .summary-card {
+      border: 1px solid #e3e6e6;
+      border-radius: 7px;
+      padding: 12px;
+      background: #fbfbfb;
+    }
+
+    .summary-number {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .summary-label {
+      color: #565959;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .primary,
+    .secondary,
+    .danger {
+      border: 1px solid;
+      border-radius: 7px;
+      padding: 9px 14px;
+      cursor: pointer;
+      min-height: 38px;
+    }
+
+    .primary {
+      background: #ffd814;
+      border-color: #fcd200;
+      color: #0f1111;
+      font-weight: 700;
+    }
+
+    .primary:hover {
+      background: #f7ca00;
+    }
+
+    .secondary {
+      background: #fff;
+      border-color: #d5d9d9;
+      color: #0f1111;
+    }
+
+    .danger {
+      background: #fff;
+      border-color: #d33;
+      color: #b12704;
+    }
+
+    .status {
+      color: #565959;
+      font-size: 14px;
+    }
+
+    .upload-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .upload-card {
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .upload-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding: 16px;
+      border-bottom: 1px solid #e3e6e6;
+      background: #fbfbfb;
+    }
+
+    .upload-title {
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .upload-desc {
+      color: #565959;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .upload-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .file-button {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #007185;
+      background: #fff;
+      color: #007185;
+      border-radius: 7px;
+      padding: 8px 12px;
+      cursor: pointer;
+      min-height: 36px;
+    }
+
+    .file-button input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .drop-zone {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e3e6e6;
+      color: #565959;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .drop-zone.dragover {
+      background: #eef8fb;
+      color: #007185;
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .slot {
+      border: 1px solid #d5d9d9;
+      border-radius: 7px;
+      background: #fff;
+      min-height: 206px;
+      display: grid;
+      grid-template-rows: auto 112px auto auto;
+      overflow: hidden;
+    }
+
+    .slot.missing {
+      background: #fafafa;
+      border-style: dashed;
+    }
+
+    .slot-name {
+      padding: 8px 9px;
+      background: #f7fafa;
+      border-bottom: 1px solid #e3e6e6;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .slot-preview {
+      display: grid;
+      place-items: center;
+      background: #f6f7f7;
+      overflow: hidden;
+    }
+
+    .slot-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #fff;
+    }
+
+    .empty-preview {
+      color: #8b8f8f;
+      font-size: 13px;
+    }
+
+    .source-name,
+    .target-path {
+      padding: 7px 9px;
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .source-name {
+      color: #0f1111;
+      min-height: 43px;
+    }
+
+    .target-path {
+      color: #565959;
+      border-top: 1px solid #f0f2f2;
+      background: #fbfbfb;
+    }
+
+    .guide-list {
+      margin: 0;
+      padding-left: 20px;
+      color: #333;
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .guide-list code {
+      background: #f2f3f3;
+      border: 1px solid #e3e6e6;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 760px) {
+      .topbar,
+      .hero,
+      .upload-head {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .upload-controls {
+        justify-content: flex-start;
+      }
+
+      .slot-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .slot {
+        min-height: 190px;
+        grid-template-rows: auto 96px auto auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">&#22270;&#29255;&#31649;&#29702;&#21518;&#21488;</div>
+    <a href="index.html">&#36820;&#22238;&#21830;&#21697;&#23637;&#31034;&#39029;</a>
+  </header>
+
+  <main class="wrap">
+    <section class="panel hero">
+      <div>
+        <h1>&#25209;&#37327;&#25972;&#29702;&#32593;&#31449;&#22270;&#29255;</h1>
+        <p class="muted">&#36873;&#25321;&#20135;&#21697;&#21518;&#65292;&#20998;&#21035;&#19978;&#20256;&#20027;&#22270;&#12289;PC &#31471; Product description &#22270;&#29255;&#12289;&#25163;&#26426;&#31471; Product description &#22270;&#29255;&#12290;&#21518;&#21488;&#20250;&#33258;&#21160;&#25353;&#32593;&#31449;&#38656;&#35201;&#30340;&#25991;&#20214;&#21517;&#25972;&#29702;&#65292;&#24182;&#23548;&#20986;&#19968;&#20010; GitHub &#19978;&#20256;&#21253;&#12290;</p>
+        <div class="notice">&#35828;&#26126;&#65306;&#36825;&#20010;&#39029;&#38754;&#19981;&#20250;&#30452;&#25509;&#20889;&#20837; GitHub&#12290;&#23427;&#20250;&#24110;&#20320;&#29983;&#25104;&#27491;&#30830;&#21629;&#21517;&#30340;&#22270;&#29255;&#21253;&#65292;&#35299;&#21387;&#21518;&#20877;&#19978;&#20256;&#21040; GitHub &#23545;&#24212;&#25991;&#20214;&#22841;&#21363;&#21487;&#12290;</div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="downloadZip" type="button">&#23548;&#20986; GitHub &#22270;&#29255;&#21253;</button>
+        <button class="secondary" id="downloadList" type="button">&#19979;&#36733;&#19978;&#20256;&#28165;&#21333;</button>
+        <button class="danger" id="clearAll" type="button">&#28165;&#31354;&#20840;&#37096;</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>&#36873;&#25321;&#20135;&#21697;</h2>
+      <div class="product-tabs" aria-label="Product tabs">
+        <button class="product-tab active" type="button" data-product="a">A-GY25302US</button>
+        <button class="product-tab" type="button" data-product="c">C-GY25302US</button>
+      </div>
+
+      <div class="summary" aria-live="polite">
+        <div class="summary-card">
+          <div class="summary-number" id="selectedCount">0</div>
+          <div class="summary-label">&#24403;&#21069;&#20135;&#21697;&#24050;&#36873;&#25321;&#22270;&#29255;</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="missingCount">25</div>
+          <div class="summary-label">&#24403;&#21069;&#20135;&#21697;&#32570;&#23569;&#22270;&#29255;</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="packageCount">0</div>
+          <div class="summary-label">&#20840;&#37096;&#20135;&#21697;&#23558;&#23548;&#20986;&#22270;&#29255;</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" id="clearCurrent" type="button">&#28165;&#31354;&#24403;&#21069;&#20135;&#21697;</button>
+        <span class="status" id="statusText">&#35831;&#36873;&#25321;&#19968;&#32452;&#22270;&#29255;&#24320;&#22987;&#25972;&#29702;&#12290;</span>
+      </div>
+    </section>
+
+    <section class="upload-grid" id="uploadGrid"></section>
+
+    <section class="panel">
+      <h2>&#19978;&#20256;&#21040; GitHub &#30340;&#31616;&#21333;&#27493;&#39588;</h2>
+      <ol class="guide-list">
+        <li>&#28857;&#20987;&#19978;&#26041; <code>&#23548;&#20986; GitHub &#22270;&#29255;&#21253;</code>&#65292;&#24471;&#21040;&#19968;&#20010; zip &#25991;&#20214;&#12290;</li>
+        <li>&#25226; zip &#25991;&#20214;&#35299;&#21387;&#65292;&#37324;&#38754;&#20250;&#26377; <code>images</code> &#25991;&#20214;&#22841;&#12290;</li>
+        <li>&#25171;&#24320; GitHub &#20179;&#24211;&#65292;&#36827;&#20837;&#23545;&#24212;&#30446;&#24405;&#65292;&#20363;&#22914; <code>images/A-GY25302US</code> &#25110; <code>images/A-GY25302US/A+</code>&#12290;</li>
+        <li>&#25226;&#35299;&#21387;&#21518;&#30340;&#22270;&#29255;&#19978;&#20256;&#24182;&#35206;&#30422;&#26087;&#22270;&#29255;&#65292;&#31561;&#24453; GitHub Pages &#33258;&#21160;&#21047;&#26032;&#12290;</li>
+      </ol>
+    </section>
+  </main>
+
+  <script>
+    const products = {
+      a: {
+        label: "A-GY25302US",
+        folder: "A-GY25302US",
+        mainCount: 7
+      },
+      c: {
+        label: "C-GY25302US",
+        folder: "C-GY25302US",
+        mainCount: 6
+      }
+    };
+
+    const groups = [
+      {
+        key: "main",
+        title: "1. \u4ea7\u54c1\u4e3b\u56fe",
+        description: "\u7528\u4e8e\u9876\u90e8\u5de6\u4fa7\u7f29\u7565\u56fe\u548c\u4e2d\u95f4\u5927\u56fe\u3002\u6309\u6587\u4ef6\u540d\u4ece\u5c0f\u5230\u5927\u6392\u5e8f\u540e\uff0c\u81ea\u52a8\u547d\u540d\u4e3a 1.jpg\u30012.jpg \u7b49\u3002",
+        targets(product) {
+          return Array.from({ length: product.mainCount }, (_, index) => ({
+            fileName: `${index + 1}.jpg`,
+            path: `images/${product.folder}/${index + 1}.jpg`
+          }));
+        }
+      },
+      {
+        key: "pcAplus",
+        title: "2. PC \u7aef Product description",
+        description: "\u7528\u4e8e\u7535\u8111\u7aef\u8be6\u60c5\u56fe\u3002\u9700\u8981 9 \u5f20\u56fe\uff0c\u81ea\u52a8\u547d\u540d\u4e3a A+ \u6587\u4ef6\u5939\u91cc\u7684 1.jpg \u5230 9.jpg\u3002",
+        targets(product) {
+          return Array.from({ length: 9 }, (_, index) => ({
+            fileName: `${index + 1}.jpg`,
+            path: `images/${product.folder}/A+/${index + 1}.jpg`
+          }));
+        }
+      },
+      {
+        key: "mobileAplus",
+        title: "3. \u624b\u673a\u7aef Product description",
+        description: "\u7528\u4e8e\u624b\u673a\u7aef\u8be6\u60c5\u56fe\u3002\u9700\u8981 9 \u5f20\u56fe\uff0c\u81ea\u52a8\u547d\u540d\u4e3a A+ \u6587\u4ef6\u5939\u91cc\u7684 10.jpg \u5230 18.jpg\u3002",
+        targets(product) {
+          return Array.from({ length: 9 }, (_, index) => ({
+            fileName: `${index + 10}.jpg`,
+            path: `images/${product.folder}/A+/${index + 10}.jpg`
+          }));
+        }
+      }
+    ];
+
+    const state = {
+      a: { main: [], pcAplus: [], mobileAplus: [] },
+      c: { main: [], pcAplus: [], mobileAplus: [] }
+    };
+
+    const objectUrls = [];
+    const collator = new Intl.Collator("zh-CN", { numeric: true, sensitivity: "base" });
+    let activeProductKey = "a";
+
+    const uploadGrid = document.querySelector("#uploadGrid");
+    const selectedCountNode = document.querySelector("#selectedCount");
+    const missingCountNode = document.querySelector("#missingCount");
+    const packageCountNode = document.querySelector("#packageCount");
+    const statusText = document.querySelector("#statusText");
+    const productTabs = document.querySelectorAll(".product-tab");
+    const clearCurrent = document.querySelector("#clearCurrent");
+    const clearAll = document.querySelector("#clearAll");
+    const downloadZip = document.querySelector("#downloadZip");
+    const downloadList = document.querySelector("#downloadList");
+
+    function sortFiles(files) {
+      return Array.from(files)
+        .filter((file) => file.type.startsWith("image/"))
+        .sort((a, b) => collator.compare(a.name, b.name));
+    }
+
+    function getTargets(productKey, groupKey) {
+      const group = groups.find((item) => item.key === groupKey);
+      return group.targets(products[productKey]);
+    }
+
+    function setGroupFiles(productKey, groupKey, files) {
+      const sortedFiles = sortFiles(files);
+      state[productKey][groupKey] = sortedFiles;
+      const targets = getTargets(productKey, groupKey);
+      const usedCount = Math.min(sortedFiles.length, targets.length);
+      const extraCount = Math.max(0, sortedFiles.length - targets.length);
+      statusText.textContent = `${products[productKey].label} \u5df2\u6dfb\u52a0 ${usedCount} \u5f20\u56fe\u7247${extraCount ? `\uff0c\u591a\u51fa\u7684 ${extraCount} \u5f20\u4e0d\u4f1a\u5bfc\u51fa\u3002` : "\u3002"}`;
+      render();
+    }
+
+    function clearProduct(productKey) {
+      state[productKey] = { main: [], pcAplus: [], mobileAplus: [] };
+      statusText.textContent = `${products[productKey].label} \u5df2\u6e05\u7a7a\u3002`;
+      render();
+    }
+
+    function getCurrentStats() {
+      const product = products[activeProductKey];
+      let selected = 0;
+      let required = 0;
+
+      groups.forEach((group) => {
+        const targetCount = group.targets(product).length;
+        required += targetCount;
+        selected += Math.min(state[activeProductKey][group.key].length, targetCount);
+      });
+
+      return {
+        selected,
+        missing: Math.max(0, required - selected)
+      };
+    }
+
+    function getPackageEntries() {
+      const entries = [];
+
+      Object.keys(products).forEach((productKey) => {
+        groups.forEach((group) => {
+          const targets = getTargets(productKey, group.key);
+          const files = state[productKey][group.key];
+
+          targets.forEach((target, index) => {
+            const file = files[index];
+            if (file) {
+              entries.push({
+                path: target.path,
+                file,
+                sourceName: file.name
+              });
+            }
+          });
+        });
+      });
+
+      return entries;
+    }
+
+    function createObjectUrl(file) {
+      const url = URL.createObjectURL(file);
+      objectUrls.push(url);
+      return url;
+    }
+
+    function renderGroup(group) {
+      const product = products[activeProductKey];
+      const targets = group.targets(product);
+      const files = state[activeProductKey][group.key];
+      const selected = Math.min(files.length, targets.length);
+      const missing = Math.max(0, targets.length - selected);
+
+      const card = document.createElement("article");
+      card.className = "upload-card";
+      card.innerHTML = `
+        <div class="upload-head">
+          <div>
+            <div class="upload-title">${group.title}</div>
+            <div class="upload-desc">${group.description}</div>
+            <div class="upload-desc">\u5f53\u524d\u9700\u8981 ${targets.length} \u5f20\uff0c\u5df2\u9009\u62e9 ${selected} \u5f20\uff0c\u7f3a\u5c11 ${missing} \u5f20\u3002</div>
+          </div>
+          <div class="upload-controls">
+            <label class="file-button">
+              \u9009\u62e9\u56fe\u7247
+              <input type="file" accept="image/*" multiple data-group="${group.key}">
+            </label>
+            <button class="secondary" type="button" data-clear-group="${group.key}">\u6e05\u7a7a\u672c\u7ec4</button>
+          </div>
+        </div>
+        <div class="drop-zone" data-drop-group="${group.key}">\u4e5f\u53ef\u4ee5\u628a\u8fd9\u4e00\u7ec4\u56fe\u7247\u76f4\u63a5\u62d6\u5230\u8fd9\u91cc\u3002\u7cfb\u7edf\u4f1a\u6309\u6587\u4ef6\u540d\u4ece\u5c0f\u5230\u5927\u6392\u5e8f\u3002</div>
+      `;
+
+      const slotGrid = document.createElement("div");
+      slotGrid.className = "slot-grid";
+
+      targets.forEach((target, index) => {
+        const file = files[index];
+        const slot = document.createElement("div");
+        slot.className = `slot${file ? "" : " missing"}`;
+
+        const preview = file
+          ? `<img src="${createObjectUrl(file)}" alt="${target.fileName}">`
+          : `<span class="empty-preview">\u5f85\u4e0a\u4f20</span>`;
+
+        slot.innerHTML = `
+          <div class="slot-name">${target.fileName}</div>
+          <div class="slot-preview">${preview}</div>
+          <div class="source-name">${file ? file.name : "\u8fd8\u6ca1\u6709\u9009\u62e9\u56fe\u7247"}</div>
+          <div class="target-path">${target.path}</div>
+        `;
+        slotGrid.appendChild(slot);
+      });
+
+      card.appendChild(slotGrid);
+      return card;
+    }
+
+    function render() {
+      objectUrls.splice(0).forEach((url) => URL.revokeObjectURL(url));
+      uploadGrid.replaceChildren(...groups.map(renderGroup));
+
+      const stats = getCurrentStats();
+      const packageEntries = getPackageEntries();
+      selectedCountNode.textContent = stats.selected;
+      missingCountNode.textContent = stats.missing;
+      packageCountNode.textContent = packageEntries.length;
+
+      productTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.product === activeProductKey);
+      });
+
+      bindDynamicControls();
+    }
+
+    function bindDynamicControls() {
+      document.querySelectorAll("input[type='file'][data-group]").forEach((input) => {
+        input.addEventListener("change", () => {
+          setGroupFiles(activeProductKey, input.dataset.group, input.files);
+          input.value = "";
+        });
+      });
+
+      document.querySelectorAll("[data-clear-group]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state[activeProductKey][button.dataset.clearGroup] = [];
+          statusText.textContent = "\u672c\u7ec4\u56fe\u7247\u5df2\u6e05\u7a7a\u3002";
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-drop-group]").forEach((zone) => {
+        zone.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          zone.classList.add("dragover");
+        });
+
+        zone.addEventListener("dragleave", () => {
+          zone.classList.remove("dragover");
+        });
+
+        zone.addEventListener("drop", (event) => {
+          event.preventDefault();
+          zone.classList.remove("dragover");
+          setGroupFiles(activeProductKey, zone.dataset.dropGroup, event.dataTransfer.files);
+        });
+      });
+    }
+
+    function makeUploadList() {
+      const entries = getPackageEntries();
+      const lines = [
+        "GitHub \u56fe\u7247\u4e0a\u4f20\u6e05\u5355",
+        "",
+        "\u8bf7\u628a\u56fe\u7247\u4e0a\u4f20\u5230\u4e0b\u9762\u8fd9\u4e9b\u4ed3\u5e93\u8def\u5f84\uff0c\u8986\u76d6\u540c\u540d\u65e7\u6587\u4ef6\u3002",
+        ""
+      ];
+
+      if (!entries.length) {
+        lines.push("\u5f53\u524d\u8fd8\u6ca1\u6709\u9009\u62e9\u4efb\u4f55\u56fe\u7247\u3002");
+      } else {
+        entries.forEach((entry, index) => {
+          lines.push(`${index + 1}. ${entry.sourceName} -> ${entry.path}`);
+        });
+      }
+
+      return lines.join("\n");
+    }
+
+    function downloadTextFile(fileName, text) {
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      triggerDownload(url, fileName);
+      URL.revokeObjectURL(url);
+    }
+
+    function triggerDownload(url, fileName) {
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function createCrcTable() {
+      const table = new Uint32Array(256);
+      for (let i = 0; i < 256; i += 1) {
+        let value = i;
+        for (let j = 0; j < 8; j += 1) {
+          value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+        }
+        table[i] = value >>> 0;
+      }
+      return table;
+    }
+
+    const crcTable = createCrcTable();
+
+    function crc32(bytes) {
+      let crc = 0xffffffff;
+      for (let i = 0; i < bytes.length; i += 1) {
+        crc = crcTable[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
+      }
+      return (crc ^ 0xffffffff) >>> 0;
+    }
+
+    function writeUint16(bytes, offset, value) {
+      bytes[offset] = value & 0xff;
+      bytes[offset + 1] = (value >>> 8) & 0xff;
+    }
+
+    function writeUint32(bytes, offset, value) {
+      bytes[offset] = value & 0xff;
+      bytes[offset + 1] = (value >>> 8) & 0xff;
+      bytes[offset + 2] = (value >>> 16) & 0xff;
+      bytes[offset + 3] = (value >>> 24) & 0xff;
+    }
+
+    function getDosTime(date) {
+      return ((date.getHours() & 31) << 11) | ((date.getMinutes() & 63) << 5) | ((date.getSeconds() / 2) & 31);
+    }
+
+    function getDosDate(date) {
+      return (((date.getFullYear() - 1980) & 127) << 9) | (((date.getMonth() + 1) & 15) << 5) | (date.getDate() & 31);
+    }
+
+    async function createZip(entries) {
+      const encoder = new TextEncoder();
+      const files = [];
+      const centralParts = [];
+      const localParts = [];
+      let offset = 0;
+
+      for (const entry of entries) {
+        const data = entry.data || new Uint8Array(await entry.file.arrayBuffer());
+        const nameBytes = encoder.encode(entry.path);
+        const crc = crc32(data);
+        const now = new Date();
+        const dosTime = getDosTime(now);
+        const dosDate = getDosDate(now);
+
+        const localHeader = new Uint8Array(30 + nameBytes.length);
+        writeUint32(localHeader, 0, 0x04034b50);
+        writeUint16(localHeader, 4, 20);
+        writeUint16(localHeader, 6, 0x0800);
+        writeUint16(localHeader, 8, 0);
+        writeUint16(localHeader, 10, dosTime);
+        writeUint16(localHeader, 12, dosDate);
+        writeUint32(localHeader, 14, crc);
+        writeUint32(localHeader, 18, data.length);
+        writeUint32(localHeader, 22, data.length);
+        writeUint16(localHeader, 26, nameBytes.length);
+        writeUint16(localHeader, 28, 0);
+        localHeader.set(nameBytes, 30);
+
+        const centralHeader = new Uint8Array(46 + nameBytes.length);
+        writeUint32(centralHeader, 0, 0x02014b50);
+        writeUint16(centralHeader, 4, 20);
+        writeUint16(centralHeader, 6, 20);
+        writeUint16(centralHeader, 8, 0x0800);
+        writeUint16(centralHeader, 10, 0);
+        writeUint16(centralHeader, 12, dosTime);
+        writeUint16(centralHeader, 14, dosDate);
+        writeUint32(centralHeader, 16, crc);
+        writeUint32(centralHeader, 20, data.length);
+        writeUint32(centralHeader, 24, data.length);
+        writeUint16(centralHeader, 28, nameBytes.length);
+        writeUint16(centralHeader, 30, 0);
+        writeUint16(centralHeader, 32, 0);
+        writeUint16(centralHeader, 34, 0);
+        writeUint16(centralHeader, 36, 0);
+        writeUint32(centralHeader, 38, 0);
+        writeUint32(centralHeader, 42, offset);
+        centralHeader.set(nameBytes, 46);
+
+        localParts.push(localHeader, data);
+        centralParts.push(centralHeader);
+        files.push({ localHeader, data, centralHeader });
+        offset += localHeader.length + data.length;
+      }
+
+      const centralOffset = offset;
+      const centralSize = centralParts.reduce((sum, part) => sum + part.length, 0);
+      const endRecord = new Uint8Array(22);
+      writeUint32(endRecord, 0, 0x06054b50);
+      writeUint16(endRecord, 4, 0);
+      writeUint16(endRecord, 6, 0);
+      writeUint16(endRecord, 8, files.length);
+      writeUint16(endRecord, 10, files.length);
+      writeUint32(endRecord, 12, centralSize);
+      writeUint32(endRecord, 16, centralOffset);
+      writeUint16(endRecord, 20, 0);
+
+      return new Blob([...localParts, ...centralParts, endRecord], { type: "application/zip" });
+    }
+
+    async function downloadZipPackage() {
+      const packageEntries = getPackageEntries();
+      if (!packageEntries.length) {
+        statusText.textContent = "\u8fd8\u6ca1\u6709\u9009\u62e9\u56fe\u7247\uff0c\u5148\u4e0a\u4f20\u56fe\u7247\u540e\u518d\u5bfc\u51fa\u3002";
+        return;
+      }
+
+      const encoder = new TextEncoder();
+      const entries = [
+        ...packageEntries,
+        {
+          path: "UPLOAD_INSTRUCTIONS.txt",
+          data: encoder.encode(makeUploadList())
+        }
+      ];
+
+      downloadZip.disabled = true;
+      downloadZip.textContent = "\u6b63\u5728\u751f\u6210...";
+      statusText.textContent = "\u6b63\u5728\u751f\u6210\u56fe\u7247\u5305\uff0c\u8bf7\u7a0d\u7b49\u3002";
+
+      try {
+        const zipBlob = await createZip(entries);
+        const url = URL.createObjectURL(zipBlob);
+        const date = new Date().toISOString().slice(0, 10);
+        triggerDownload(url, `miao-ai-images-${date}.zip`);
+        URL.revokeObjectURL(url);
+        statusText.textContent = "\u56fe\u7247\u5305\u5df2\u751f\u6210\u3002\u89e3\u538b\u540e\u6309\u6e05\u5355\u4e0a\u4f20\u5230 GitHub\u3002";
+      } catch (error) {
+        statusText.textContent = "\u751f\u6210\u5931\u8d25\uff0c\u8bf7\u51cf\u5c11\u5355\u6b21\u56fe\u7247\u6570\u91cf\u540e\u518d\u8bd5\u3002";
+      } finally {
+        downloadZip.disabled = false;
+        downloadZip.textContent = "\u5bfc\u51fa GitHub \u56fe\u7247\u5305";
+      }
+    }
+
+    productTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activeProductKey = tab.dataset.product;
+        statusText.textContent = `\u6b63\u5728\u6574\u7406 ${products[activeProductKey].label}\u3002`;
+        render();
+      });
+    });
+
+    clearCurrent.addEventListener("click", () => {
+      clearProduct(activeProductKey);
+    });
+
+    clearAll.addEventListener("click", () => {
+      Object.keys(products).forEach(clearProduct);
+      statusText.textContent = "\u5168\u90e8\u4ea7\u54c1\u56fe\u7247\u5df2\u6e05\u7a7a\u3002";
+      render();
+    });
+
+    downloadList.addEventListener("click", () => {
+      downloadTextFile("github-upload-list.txt", makeUploadList());
+      statusText.textContent = "\u4e0a\u4f20\u6e05\u5355\u5df2\u4e0b\u8f7d\u3002";
+    });
+
+    downloadZip.addEventListener("click", downloadZipPackage);
+
+    render();
+  </script>
+</body>
+</html>
