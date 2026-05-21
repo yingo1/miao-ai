@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/upload-images.js": {
+      "maxDuration": 30
+    }
+  }
+}
