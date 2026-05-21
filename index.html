@@ -1,1 +1,1389 @@
-placeholder
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Product Display Mockup</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      color: #0f1111;
+      background: #fff;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .amazon-top {
+      background: #131921;
+      color: #fff;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px 18px;
+    }
+
+    .brand-word {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .search-display {
+      height: 40px;
+      flex: 1;
+      min-width: 180px;
+      display: grid;
+      grid-template-columns: 58px 1fr 48px;
+      border-radius: 4px;
+      overflow: hidden;
+      color: #111;
+    }
+
+    .search-category,
+    .search-button {
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+    }
+
+    .search-category {
+      background: #e6e6e6;
+      color: #555;
+      border-right: 1px solid #c7c7c7;
+    }
+
+    .search-field {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 15px;
+      color: #565959;
+    }
+
+    .search-button {
+      background: #febd69;
+      font-size: 20px;
+    }
+
+    .top-note {
+      font-size: 13px;
+      line-height: 1.2;
+      color: #e6e6e6;
+      white-space: nowrap;
+    }
+
+    .subnav {
+      background: #232f3e;
+      color: #fff;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 20px;
+      font-size: 14px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .product-tabs {
+      max-width: 1460px;
+      margin: 0 auto;
+      padding: 12px 20px 0;
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid #d5d9d9;
+    }
+
+    .product-tab {
+      border: 1px solid #d5d9d9;
+      border-bottom: 0;
+      border-radius: 8px 8px 0 0;
+      background: #f7fafa;
+      color: #0f1111;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      min-width: 148px;
+    }
+
+    .product-tab.active {
+      background: #fff;
+      border-color: #007185;
+      box-shadow: inset 0 3px 0 #ff9900;
+      font-weight: 700;
+    }
+
+    .page {
+      max-width: 1460px;
+      margin: 0 auto;
+      padding: 18px 20px 56px;
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      color: #565959;
+      margin: 0 0 12px;
+    }
+
+    .product-layout {
+      display: grid;
+      grid-template-columns: 58px minmax(430px, 560px) minmax(340px, 450px) 244px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .thumbs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .thumb {
+      width: 48px;
+      height: 48px;
+      border: 1px solid #a2a6ac;
+      border-radius: 6px;
+      background: #fff;
+      padding: 2px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .thumb.active {
+      border: 2px solid #007185;
+      box-shadow: 0 0 0 2px #c8f3fa;
+    }
+
+    .gallery-main {
+      text-align: center;
+      position: sticky;
+      top: 16px;
+    }
+
+    .main-image-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid #f0f2f2;
+      position: relative;
+      touch-action: pan-y;
+    }
+
+    .main-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .mobile-main-slider {
+      display: none;
+    }
+
+    .mobile-main-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .full-view {
+      color: #007185;
+      font-size: 14px;
+      margin-top: 14px;
+    }
+
+    .mobile-gallery-dots {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mobile-gallery-dot {
+      width: 7px;
+      height: 7px;
+      border: 0;
+      border-radius: 50%;
+      padding: 0;
+      background: #d5d9d9;
+      cursor: pointer;
+    }
+
+    .mobile-gallery-dot.active {
+      width: 9px;
+      height: 9px;
+      background: #0f1111;
+    }
+
+    .info h1 {
+      font-size: 24px;
+      line-height: 1.28;
+      font-weight: 400;
+      margin: 0 0 4px;
+    }
+
+    .store {
+      color: #007185;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+      border-bottom: 1px solid #d5d9d9;
+      padding-bottom: 9px;
+      margin-bottom: 12px;
+    }
+
+    .stars {
+      color: #f59b00;
+      letter-spacing: 1px;
+      font-size: 16px;
+    }
+
+    .link {
+      color: #007185;
+    }
+
+    .choice {
+      display: inline-block;
+      background: #232f3e;
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      margin-bottom: 10px;
+    }
+
+    .choice span {
+      color: #f3a847;
+    }
+
+    .bought {
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 14px;
+    }
+
+    .deal {
+      display: inline-block;
+      background: #cc0c39;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 7px 10px;
+      border-radius: 3px;
+      margin-bottom: 8px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 3px;
+    }
+
+    .discount {
+      color: #cc0c39;
+      font-size: 24px;
+      font-weight: 300;
+    }
+
+    .price {
+      font-size: 30px;
+      color: #0f1111;
+    }
+
+    .price sup {
+      font-size: 13px;
+      top: -0.65em;
+      position: relative;
+    }
+
+    .unit,
+    .mini-note {
+      font-size: 13px;
+      color: #565959;
+    }
+
+    .list-price {
+      font-size: 12px;
+      color: #565959;
+      margin-bottom: 16px;
+    }
+
+    .list-price span {
+      text-decoration: line-through;
+    }
+
+    .prime-note,
+    .shipping,
+    .stock-note {
+      font-size: 14px;
+      line-height: 1.38;
+      margin-bottom: 8px;
+    }
+
+    .shipping strong {
+      font-weight: 700;
+    }
+
+    .prime {
+      color: #007185;
+      font-weight: 700;
+    }
+
+    .coupon-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      margin: 7px 0;
+      flex-wrap: wrap;
+    }
+
+    .coupon {
+      background: #7fda69;
+      padding: 2px 6px;
+    }
+
+    .option-section {
+      margin-top: 13px;
+    }
+
+    .section-label {
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    .section-label strong {
+      font-weight: 700;
+    }
+
+    .swatches {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .swatch {
+      width: 86px;
+      border: 1px solid #8d9096;
+      border-radius: 6px;
+      padding: 4px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .swatch.active,
+    .size-btn.active {
+      border: 2px solid #007185;
+      box-shadow: 0 0 0 2px #c8f3fa;
+    }
+
+    .swatch img {
+      width: 100%;
+      height: 58px;
+      object-fit: cover;
+      border-radius: 3px;
+      display: block;
+    }
+
+    .swatch-price {
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.15;
+      text-align: left;
+    }
+
+    .sizes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .size-btn {
+      border: 1px solid #8d9096;
+      background: #fff;
+      padding: 8px 10px;
+      border-radius: 7px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .buy-box {
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+    }
+
+    .buy-price {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .delivery-line {
+      line-height: 1.38;
+      margin-bottom: 11px;
+    }
+
+    .location {
+      color: #007185;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .stock {
+      color: #007600;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .qty {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      background: #f0f2f2;
+      padding: 0 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .static-button {
+      width: 100%;
+      border: 0;
+      border-radius: 22px;
+      padding: 9px 12px;
+      margin-bottom: 8px;
+      cursor: default;
+      color: #111;
+    }
+
+    .cart-button {
+      background: #ffd814;
+    }
+
+    .buy-button {
+      background: #ffa41c;
+    }
+
+    .secure {
+      font-size: 13px;
+      color: #565959;
+      border-top: 1px solid #e7e7e7;
+      padding-top: 10px;
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+
+    .static-link-list {
+      margin-top: 12px;
+      border-top: 1px solid #e7e7e7;
+      padding-top: 10px;
+      color: #007185;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .content-section {
+      margin-top: 30px;
+      border-top: 1px solid #d5d9d9;
+      padding-top: 18px;
+    }
+
+    .content-section h2 {
+      font-size: 20px;
+      line-height: 1.3;
+      margin: 0 0 14px;
+      font-weight: 700;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 34px;
+    }
+
+    .about-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 14px;
+      line-height: 1.48;
+    }
+
+    .about-list li {
+      margin-bottom: 8px;
+    }
+
+    .facts-panel {
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .fact-row {
+      display: grid;
+      grid-template-columns: 132px 1fr;
+      border-bottom: 1px solid #e7e7e7;
+      font-size: 13px;
+      min-height: 38px;
+    }
+
+    .fact-row:last-child {
+      border-bottom: 0;
+    }
+
+    .fact-label {
+      background: #f7fafa;
+      font-weight: 700;
+      padding: 10px;
+    }
+
+    .fact-value {
+      padding: 10px;
+    }
+
+    .comparison-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .feature-card {
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 126px;
+    }
+
+    .feature-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: 13px;
+      color: #565959;
+      line-height: 1.45;
+    }
+
+    .product-description {
+      width: 100%;
+      margin: 30px 0 0;
+      border-top: 1px solid #d5d9d9;
+      padding-top: 10px;
+      background: #fff;
+    }
+
+    .product-description h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .aplus-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: #fff;
+    }
+
+    .aplus-mobile {
+      display: none;
+    }
+
+    .aplus-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #fff;
+    }
+
+    .aplus-pair {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .aplus-pair .aplus-image {
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .aplus-carousel {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .aplus-slide {
+      display: none;
+      width: 100%;
+    }
+
+    .aplus-slide.active {
+      display: block;
+    }
+
+    .carousel-control {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 72px;
+      border: 0;
+      background: rgba(255, 255, 255, 0.34);
+      color: #333;
+      font-size: 44px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .carousel-control:hover {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .carousel-control.prev {
+      left: 12px;
+    }
+
+    .carousel-control.next {
+      right: 12px;
+    }
+
+    .carousel-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-dot {
+      width: 9px;
+      height: 9px;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+    }
+
+    .carousel-dot.active {
+      background: #f59b00;
+      border-color: #f59b00;
+    }
+
+    @media (max-width: 1180px) {
+      .product-layout {
+        grid-template-columns: 58px minmax(360px, 1fr) minmax(330px, 420px);
+      }
+
+      .buy-box {
+        grid-column: 3;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .amazon-top {
+        flex-wrap: wrap;
+      }
+
+      .top-note {
+        display: none;
+      }
+
+      .product-layout {
+        grid-template-columns: 56px 1fr;
+      }
+
+      .info,
+      .buy-box {
+        grid-column: 1 / -1;
+      }
+
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .aplus-content {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .amazon-top {
+        padding: 10px 12px;
+        gap: 10px;
+      }
+
+      .brand-word {
+        font-size: 21px;
+      }
+
+      .search-display {
+        grid-template-columns: 48px 1fr 42px;
+        width: 100%;
+        order: 3;
+      }
+
+      .subnav {
+        padding: 0 12px;
+      }
+
+      .product-tabs {
+        padding: 10px 12px 0;
+        overflow-x: auto;
+      }
+
+      .product-tab {
+        flex: 0 0 auto;
+        min-width: 136px;
+        padding: 9px 12px;
+      }
+
+      .page {
+        padding: 14px 12px 36px;
+      }
+
+      .product-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .thumbs {
+        display: none;
+      }
+
+      .gallery-main {
+        order: 1;
+        position: static;
+      }
+
+      #mainImage {
+        display: none;
+      }
+
+      .main-image-box {
+        display: block;
+      }
+
+      .mobile-main-slider {
+        display: flex;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform: translate3d(0, 0, 0);
+        transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+        will-change: transform;
+      }
+
+      .mobile-main-slider.dragging {
+        transition: none;
+      }
+
+      .info {
+        order: 3;
+      }
+
+      .buy-box {
+        order: 4;
+      }
+
+      .full-view {
+        display: none;
+      }
+
+      .mobile-gallery-dots {
+        display: flex;
+      }
+
+      .info h1 {
+        font-size: 21px;
+      }
+
+      .comparison-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .fact-row {
+        grid-template-columns: 118px 1fr;
+      }
+
+      .product-description {
+        margin-top: 26px;
+      }
+
+      .aplus-desktop {
+        display: none;
+      }
+
+      .aplus-mobile {
+        display: flex;
+      }
+
+      .carousel-control {
+        width: 34px;
+        height: 56px;
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="amazon-top" aria-label="Static Amazon-style header">
+    <div class="brand-word">amazon</div>
+    <div class="search-display" aria-hidden="true">
+      <div class="search-category">All</div>
+      <div class="search-field">Night lights plug into wall</div>
+      <div class="search-button">Search</div>
+    </div>
+    <div class="top-note">Returns<br />& Orders</div>
+    <div class="top-note">Cart</div>
+  </header>
+
+  <nav class="subnav" aria-label="Static category navigation">
+    <span>All</span>
+    <span>Today's Deals</span>
+    <span>Home & Kitchen</span>
+    <span>Lighting</span>
+    <span>Customer Service</span>
+  </nav>
+
+  <div class="product-tabs" aria-label="Product display tabs">
+    <button class="product-tab active" type="button" data-product="a">A-GY25302US</button>
+    <button class="product-tab" type="button" data-product="c">C-GY25302US</button>
+  </div>
+
+  <main class="page">
+    <div class="breadcrumb">Home &amp; Kitchen &rsaquo; Lighting &amp; Ceiling Fans &rsaquo; Wall Lights &rsaquo; Night Lights</div>
+
+    <section class="product-layout">
+      <aside class="thumbs" aria-label="Product image thumbnails">
+        <button class="thumb active" data-index="0" aria-label="Show image 1">
+          <img src="images/A-GY25302US/1.jpg" alt="Product thumbnail 1" />
+        </button>
+        <button class="thumb" data-index="1" aria-label="Show image 2">
+          <img src="images/A-GY25302US/2.jpg" alt="Product thumbnail 2" />
+        </button>
+        <button class="thumb" data-index="2" aria-label="Show image 3">
+          <img src="images/A-GY25302US/3.jpg" alt="Product thumbnail 3" />
+        </button>
+        <button class="thumb" data-index="3" aria-label="Show image 4">
+          <img src="images/A-GY25302US/4.jpg" alt="Product thumbnail 4" />
+        </button>
+        <button class="thumb" data-index="4" aria-label="Show image 5">
+          <img src="images/A-GY25302US/5.jpg" alt="Product thumbnail 5" />
+        </button>
+        <button class="thumb" data-index="5" aria-label="Show image 6">
+          <img src="images/A-GY25302US/6.jpg" alt="Product thumbnail 6" />
+        </button>
+        <button class="thumb" data-index="6" aria-label="Show image 7">
+          <img src="images/A-GY25302US/7.jpg" alt="Product thumbnail 7" />
+        </button>
+      </aside>
+
+      <section class="gallery-main">
+        <div class="main-image-box">
+          <img id="mainImage" src="images/A-GY25302US/1.jpg" alt="Main product display" />
+          <div class="mobile-main-slider" id="mobileMainSlider" aria-hidden="true">
+            <img class="mobile-main-slide" src="images/A-GY25302US/1.jpg" alt="" />
+            <img class="mobile-main-slide" src="images/A-GY25302US/2.jpg" alt="" />
+            <img class="mobile-main-slide" src="images/A-GY25302US/3.jpg" alt="" />
+            <img class="mobile-main-slide" src="images/A-GY25302US/4.jpg" alt="" />
+            <img class="mobile-main-slide" src="images/A-GY25302US/5.jpg" alt="" />
+            <img class="mobile-main-slide" src="images/A-GY25302US/6.jpg" alt="" />
+            <img class="mobile-main-slide" src="images/A-GY25302US/7.jpg" alt="" />
+          </div>
+        </div>
+        <div class="full-view">Click to see full view</div>
+        <div class="mobile-gallery-dots" aria-label="Product image indicators">
+          <button class="mobile-gallery-dot active" type="button" data-index="0" aria-label="Show product image 1"></button>
+          <button class="mobile-gallery-dot" type="button" data-index="1" aria-label="Show product image 2"></button>
+          <button class="mobile-gallery-dot" type="button" data-index="2" aria-label="Show product image 3"></button>
+          <button class="mobile-gallery-dot" type="button" data-index="3" aria-label="Show product image 4"></button>
+          <button class="mobile-gallery-dot" type="button" data-index="4" aria-label="Show product image 5"></button>
+          <button class="mobile-gallery-dot" type="button" data-index="5" aria-label="Show product image 6"></button>
+          <button class="mobile-gallery-dot" type="button" data-index="6" aria-label="Show product image 7"></button>
+        </div>
+      </section>
+
+      <section class="info">
+        <h1>EFEMF Night Lights Plug into Wall, Pleated Fabric Cover Night Light, Dusk to Dawn Sensor Vintage Nightlight, 0-100LM Dimmable, for Bedroom Living Room Hallway</h1>
+        <div class="store">Visit the EFEMF Store</div>
+        <div class="rating-row">
+          <span>4.7</span>
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="link">127 ratings</span>
+        </div>
+
+        <div class="choice">Amazon's <span>Choice</span></div>
+        <div class="bought">500+ bought in past month</div>
+
+        <div class="deal">Limited time deal</div>
+        <div class="price-row">
+          <span class="discount">-25%</span>
+          <span class="price"><sup>$</sup>14<sup>99</sup></span>
+          <span class="unit">Typical price: $19.99</span>
+        </div>
+        <div class="list-price">List Price: <span>$19.99</span></div>
+
+        <div class="prime-note"><span class="link">Apply $3 coupon</span> at checkout for extra savings.</div>
+        <div class="shipping">Get <strong>Fast, Free Shipping</strong> with <span class="prime">Amazon Prime</span><br /><span class="link">FREE Returns</span></div>
+        <div class="coupon-row"><span class="coupon">Save 5%</span><span>on 2 select item(s)</span><span class="link">Shop items &gt;</span></div>
+        <div class="coupon-row"><span class="coupon">Save 10%</span><span>on 4 select item(s)</span><span class="link">Shop items &gt;</span></div>
+        <div class="stock-note">Available at a lower price from <span class="link">other sellers</span> that may not offer free Prime shipping.</div>
+
+        <div class="option-section">
+          <div class="section-label">Color: <strong>Pleated fabric cover-3000K</strong></div>
+          <div class="swatches">
+            <button class="swatch active">
+              <img src="images/A-GY25302US/1.jpg" alt="Pleated fabric cover 3000K" />
+              <div class="swatch-price">$14.99<br />Warm white</div>
+            </button>
+            <button class="swatch">
+              <img src="images/A-GY25302US/2.jpg" alt="Dusk to dawn sensor view" />
+              <div class="swatch-price">$14.99<br />Sensor</div>
+            </button>
+            <button class="swatch">
+              <img src="images/A-GY25302US/3.jpg" alt="Side view" />
+              <div class="swatch-price">$14.99<br />Black base</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="option-section">
+          <div class="section-label">Size: <strong>1 Pack</strong></div>
+          <div class="sizes">
+            <button class="size-btn active">1 Pack</button>
+            <button class="size-btn">2 Pack</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="buy-box" aria-label="Static buy box">
+        <div class="buy-price"><sup>$</sup>14<sup>99</sup></div>
+        <div class="delivery-line"><span class="prime">FREE delivery</span> Monday, May 18 on orders shipped by Amazon over $35</div>
+        <div class="delivery-line">Or fastest delivery Tomorrow, May 16. Order within 6 hrs 24 mins</div>
+        <div class="location">Deliver to United States</div>
+        <div class="stock">In Stock</div>
+        <div class="qty">Qty: 1 &#9662;</div>
+        <button class="static-button cart-button" type="button">Add to Cart</button>
+        <button class="static-button buy-button" type="button">Buy Now</button>
+        <div class="secure">Secure transaction<br />Ships from Amazon<br />Sold by EFEMF</div>
+        <div class="static-link-list">
+          <div>Add a gift receipt for easy returns</div>
+          <div>Add to List</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="content-section">
+      <h2>About this item</h2>
+      <div class="about-layout">
+        <ul class="about-list">
+          <li>Decor pleated fabric cover night light features a textured beige shade, metallic copper accent, and black backing for a warm vintage look.</li>
+          <li>Auto dusk-to-dawn sensor turns the light on at dusk and off at dawn for effortless night lighting.</li>
+          <li>0-100LM dimmable LED lets you adjust from a soft night glow to brighter ambient lighting.</li>
+          <li>Eye-friendly 3000K warm white glow diffuses through the fabric shade to reduce glare.</li>
+          <li>Stable plug-in design works in bedrooms, living rooms, hallways, bathrooms, and entryways.</li>
+        </ul>
+
+        <div class="facts-panel">
+          <div class="fact-row">
+            <div class="fact-label">Brand</div>
+            <div class="fact-value">EFEMF</div>
+          </div>
+          <div class="fact-row">
+            <div class="fact-label">Color</div>
+            <div class="fact-value">Pleated fabric cover-3000K</div>
+          </div>
+          <div class="fact-row">
+            <div class="fact-label">Material</div>
+            <div class="fact-value">Plastic, fabric shade, metallic finish</div>
+          </div>
+          <div class="fact-row">
+            <div class="fact-label">Power Source</div>
+            <div class="fact-value">Plug-in electric</div>
+          </div>
+          <div class="fact-row">
+            <div class="fact-label">Brightness</div>
+            <div class="fact-value">0-100 lumens</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Product information</h2>
+      <div class="facts-panel">
+        <div class="fact-row">
+          <div class="fact-label">Manufacturer</div>
+          <div class="fact-value">GK Lighting</div>
+        </div>
+        <div class="fact-row">
+          <div class="fact-label">Part Number</div>
+          <div class="fact-value">A-GY25302US</div>
+        </div>
+        <div class="fact-row">
+          <div class="fact-label">Item Weight</div>
+          <div class="fact-value">6.6 ounces</div>
+        </div>
+        <div class="fact-row">
+          <div class="fact-label">Product Dimensions</div>
+          <div class="fact-value">1.96 x 3.8 x 3.5 inches</div>
+        </div>
+        <div class="fact-row">
+          <div class="fact-label">Voltage</div>
+          <div class="fact-value">120 volts</div>
+        </div>
+        <div class="fact-row">
+          <div class="fact-label">Color Temperature</div>
+          <div class="fact-value">3000 Kelvin</div>
+        </div>
+        <div class="fact-row">
+          <div class="fact-label">Batteries</div>
+          <div class="fact-value">No batteries required</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Feature highlights</h2>
+      <div class="comparison-strip">
+        <div class="feature-card">
+          <strong>Dusk to dawn sensor</strong>
+          <p>Automatically responds to room light, so the night light works when the space gets dark.</p>
+        </div>
+        <div class="feature-card">
+          <strong>Stepless dimming</strong>
+          <p>Adjust the brightness from low nighttime guidance to brighter ambient illumination.</p>
+        </div>
+        <div class="feature-card">
+          <strong>Warm fabric shade</strong>
+          <p>The pleated shade softens the glow and creates a cozy decorative look.</p>
+        </div>
+        <div class="feature-card">
+          <strong>Plug-in design</strong>
+          <p>No hardwiring is needed, making it simple to use in bedrooms, hallways, and living rooms.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-description">
+      <h2>Product description</h2>
+      <div class="aplus-content aplus-desktop" aria-label="Product description images for desktop">
+        <img class="aplus-image" src="images/A-GY25302US/A+/1.jpg" alt="Product description image 1" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/2.jpg" alt="Product description image 2" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/3.jpg" alt="Product description image 3" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/4.jpg" alt="Product description image 4" />
+        <div class="aplus-pair" aria-label="Product description side by side images">
+          <img class="aplus-image" src="images/A-GY25302US/A+/5.jpg" alt="Product description image 5" />
+          <img class="aplus-image" src="images/A-GY25302US/A+/6.jpg" alt="Product description image 6" />
+        </div>
+        <div class="aplus-carousel" aria-label="Product description carousel">
+          <img class="aplus-image aplus-slide active" src="images/A-GY25302US/A+/7.jpg" alt="Product description carousel image 7" />
+          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/8.jpg" alt="Product description carousel image 8" />
+          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/9.jpg" alt="Product description carousel image 9" />
+          <button class="carousel-control prev" type="button" aria-label="Previous product description image">&#8249;</button>
+          <button class="carousel-control next" type="button" aria-label="Next product description image">&#8250;</button>
+          <div class="carousel-dots" aria-label="Carousel slide indicators">
+            <button class="carousel-dot active" type="button" data-slide="0" aria-label="Show product description image 7"></button>
+            <button class="carousel-dot" type="button" data-slide="1" aria-label="Show product description image 8"></button>
+            <button class="carousel-dot" type="button" data-slide="2" aria-label="Show product description image 9"></button>
+          </div>
+        </div>
+      </div>
+      <div class="aplus-content aplus-mobile" aria-label="Product description images for mobile">
+        <img class="aplus-image" src="images/A-GY25302US/A+/10.jpg" alt="Mobile product description image 10" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/11.jpg" alt="Mobile product description image 11" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/12.jpg" alt="Mobile product description image 12" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/13.jpg" alt="Mobile product description image 13" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/14.jpg" alt="Mobile product description image 14" />
+        <img class="aplus-image" src="images/A-GY25302US/A+/15.jpg" alt="Mobile product description image 15" />
+        <div class="aplus-carousel" aria-label="Mobile product description carousel">
+          <img class="aplus-image aplus-slide active" src="images/A-GY25302US/A+/16.jpg" alt="Mobile product description carousel image 16" />
+          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/17.jpg" alt="Mobile product description carousel image 17" />
+          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/18.jpg" alt="Mobile product description carousel image 18" />
+          <button class="carousel-control prev" type="button" aria-label="Previous mobile product description image">&#8249;</button>
+          <button class="carousel-control next" type="button" aria-label="Next mobile product description image">&#8250;</button>
+          <div class="carousel-dots" aria-label="Mobile carousel slide indicators">
+            <button class="carousel-dot active" type="button" data-slide="0" aria-label="Show mobile product description image 16"></button>
+            <button class="carousel-dot" type="button" data-slide="1" aria-label="Show mobile product description image 17"></button>
+            <button class="carousel-dot" type="button" data-slide="2" aria-label="Show mobile product description image 18"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const productCatalog = {
+      a: {
+        base: "images/A-GY25302US",
+        mainCount: 7,
+        label: "A-GY25302US"
+      },
+      c: {
+        base: "images/C-GY25302US",
+        mainCount: 6,
+        label: "C-GY25302US"
+      }
+    };
+
+    const mainImage = document.querySelector("#mainImage");
+    const mainImageBox = document.querySelector(".main-image-box");
+    const mobileSlider = document.querySelector("#mobileMainSlider");
+    const thumbs = document.querySelectorAll(".thumb");
+    const thumbImages = document.querySelectorAll(".thumb img");
+    const mobileSlides = document.querySelectorAll(".mobile-main-slide");
+    const productDots = document.querySelectorAll(".mobile-gallery-dot");
+    const swatchImages = document.querySelectorAll(".swatch img");
+    const productTabs = document.querySelectorAll(".product-tab");
+    const desktopDirectImages = document.querySelectorAll(".aplus-desktop > .aplus-image:not(.aplus-slide)");
+    const desktopPairImages = document.querySelectorAll(".aplus-desktop .aplus-pair .aplus-image");
+    const desktopCarouselImages = document.querySelectorAll(".aplus-desktop .aplus-slide");
+    const mobileDirectImages = document.querySelectorAll(".aplus-mobile > .aplus-image:not(.aplus-slide)");
+    const mobileCarouselImages = document.querySelectorAll(".aplus-mobile .aplus-slide");
+
+    let activeProductKey = "a";
+    let images = getMainImages(productCatalog[activeProductKey]);
+    let activeProductImage = 0;
+
+    function getMainImages(product) {
+      return Array.from({ length: product.mainCount }, (_, index) => `${product.base}/${index + 1}.jpg`);
+    }
+
+    function getAplusImages(product, start, count) {
+      return Array.from({ length: count }, (_, index) => `${product.base}/A+/${start + index}.jpg`);
+    }
+
+    function updateImageSet(nodes, sources) {
+      nodes.forEach((node, index) => {
+        if (sources[index]) {
+          node.src = sources[index];
+          node.hidden = false;
+        } else {
+          node.hidden = true;
+        }
+      });
+    }
+
+    function setMobileSliderPosition(offset = 0, animate = true) {
+      if (!mobileSlider) return;
+      mobileSlider.classList.toggle("dragging", !animate);
+      mobileSlider.style.transform = `translate3d(calc(${-activeProductImage * 100}% + ${offset}px), 0, 0)`;
+    }
+
+    function showProductImage(index, animate = true) {
+      activeProductImage = (index + images.length) % images.length;
+      mainImage.src = images[activeProductImage];
+      thumbs.forEach((item) => {
+        const itemIndex = Number(item.dataset.index);
+        item.hidden = itemIndex >= images.length;
+        item.classList.toggle("active", itemIndex === activeProductImage);
+      });
+      productDots.forEach((dot) => {
+        const dotIndex = Number(dot.dataset.index);
+        dot.hidden = dotIndex >= images.length;
+        dot.classList.toggle("active", dotIndex === activeProductImage);
+      });
+      setMobileSliderPosition(0, animate);
+    }
+
+    function setCarouselToFirst(carousel) {
+      const slides = carousel.querySelectorAll(".aplus-slide");
+      const dots = carousel.querySelectorAll(".carousel-dot");
+      slides.forEach((slide, index) => slide.classList.toggle("active", index === 0));
+      dots.forEach((dot, index) => dot.classList.toggle("active", index === 0));
+    }
+
+    function switchProduct(productKey) {
+      const product = productCatalog[productKey];
+      if (!product) return;
+
+      activeProductKey = productKey;
+      images = getMainImages(product);
+      activeProductImage = 0;
+
+      updateImageSet(thumbImages, images);
+      updateImageSet(mobileSlides, images);
+      updateImageSet(swatchImages, images.slice(0, swatchImages.length));
+      updateImageSet(desktopDirectImages, getAplusImages(product, 1, desktopDirectImages.length));
+      updateImageSet(desktopPairImages, getAplusImages(product, 5, desktopPairImages.length));
+      updateImageSet(desktopCarouselImages, getAplusImages(product, 7, desktopCarouselImages.length));
+      updateImageSet(mobileDirectImages, getAplusImages(product, 10, mobileDirectImages.length));
+      updateImageSet(mobileCarouselImages, getAplusImages(product, 16, mobileCarouselImages.length));
+
+      productTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.product === productKey);
+      });
+
+      document.querySelectorAll(".aplus-carousel").forEach(setCarouselToFirst);
+      showProductImage(0, true);
+    }
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener("click", () => {
+        showProductImage(Number(thumb.dataset.index));
+      });
+    });
+
+    productDots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        showProductImage(Number(dot.dataset.index));
+      });
+    });
+
+    productTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        switchProduct(tab.dataset.product);
+      });
+    });
+
+    if (mainImageBox) {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchDeltaX = 0;
+      let isHorizontalSwipe = false;
+
+      mainImageBox.addEventListener("touchstart", (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+        touchStartY = event.changedTouches[0].clientY;
+        touchDeltaX = 0;
+        isHorizontalSwipe = false;
+        setMobileSliderPosition(0, false);
+      }, { passive: true });
+
+      mainImageBox.addEventListener("touchmove", (event) => {
+        touchDeltaX = event.changedTouches[0].clientX - touchStartX;
+        const touchDeltaY = event.changedTouches[0].clientY - touchStartY;
+        const isMostlyHorizontal = Math.abs(touchDeltaX) > Math.abs(touchDeltaY);
+
+        if (Math.abs(touchDeltaX) > 8 && isMostlyHorizontal) {
+          isHorizontalSwipe = true;
+          event.preventDefault();
+          const slideWidth = mainImageBox.clientWidth || 1;
+          const limitedDelta = Math.max(-slideWidth, Math.min(slideWidth, touchDeltaX));
+          setMobileSliderPosition(limitedDelta, false);
+        }
+      }, { passive: false });
+
+      mainImageBox.addEventListener("touchend", (event) => {
+        const touchEndX = event.changedTouches[0].clientX;
+        const touchEndY = event.changedTouches[0].clientY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+        const slideWidth = mainImageBox.clientWidth || 1;
+        const threshold = Math.min(90, slideWidth * 0.18);
+
+        if (isHorizontalSwipe && Math.abs(diffX) > threshold && Math.abs(diffX) > Math.abs(diffY)) {
+          showProductImage(activeProductImage + (diffX < 0 ? 1 : -1), true);
+        } else {
+          showProductImage(activeProductImage, true);
+        }
+      }, { passive: true });
+
+      mainImageBox.addEventListener("touchcancel", () => {
+        showProductImage(activeProductImage, true);
+      }, { passive: true });
+    }
+
+    document.querySelectorAll(".swatch, .size-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        const group = button.classList.contains("swatch") ? ".swatch" : ".size-btn";
+        document.querySelectorAll(group).forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+      });
+    });
+
+    document.querySelectorAll(".aplus-carousel").forEach((carousel) => {
+      const slides = carousel.querySelectorAll(".aplus-slide");
+      const dots = carousel.querySelectorAll(".carousel-dot");
+      const prevButton = carousel.querySelector(".carousel-control.prev");
+      const nextButton = carousel.querySelector(".carousel-control.next");
+
+      function showAplusSlide(index) {
+        const activeSlide = (index + slides.length) % slides.length;
+        slides.forEach((slide, slideIndex) => {
+          slide.classList.toggle("active", slideIndex === activeSlide);
+        });
+        dots.forEach((dot, dotIndex) => {
+          dot.classList.toggle("active", dotIndex === activeSlide);
+        });
+      }
+
+      if (slides.length && dots.length && prevButton && nextButton) {
+        prevButton.addEventListener("click", () => {
+          const current = Array.from(slides).findIndex((slide) => slide.classList.contains("active"));
+          showAplusSlide(current - 1);
+        });
+        nextButton.addEventListener("click", () => {
+          const current = Array.from(slides).findIndex((slide) => slide.classList.contains("active"));
+          showAplusSlide(current + 1);
+        });
+        dots.forEach((dot) => {
+          dot.addEventListener("click", () => showAplusSlide(Number(dot.dataset.slide)));
+        });
+      }
+    });
+
+    switchProduct(activeProductKey);
+  </script>
+</body>
+</html>
+
