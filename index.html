@@ -656,11 +656,19 @@
       object-fit: cover;
     }
 
+    .aplus-pair.single {
+      grid-template-columns: 1fr;
+    }
+
     .aplus-carousel {
       position: relative;
       width: 100%;
       overflow: hidden;
       background: #fff;
+    }
+
+    .aplus-carousel.empty {
+      display: none;
     }
 
     .aplus-slide {
@@ -1199,6 +1207,7 @@
     const desktopCarouselImages = document.querySelectorAll(".aplus-desktop .aplus-slide");
     const mobileDirectImages = document.querySelectorAll(".aplus-mobile > .aplus-image:not(.aplus-slide)");
     const mobileCarouselImages = document.querySelectorAll(".aplus-mobile .aplus-slide");
+    const aplusImages = document.querySelectorAll(".product-description img");
 
     let activeProductKey = "a";
     let images = getMainImages(productCatalog[activeProductKey]);
@@ -1215,12 +1224,68 @@
     function updateImageSet(nodes, sources) {
       nodes.forEach((node, index) => {
         if (sources[index]) {
-          node.src = sources[index];
           node.hidden = false;
+          node.src = sources[index];
         } else {
           node.hidden = true;
         }
       });
+    }
+
+    function getVisibleSlides(carousel) {
+      return Array.from(carousel.querySelectorAll(".aplus-slide"))
+        .map((slide, index) => ({ slide, index }))
+        .filter((item) => !item.slide.hidden);
+    }
+
+    function refreshAplusPair(pair) {
+      if (!pair) return;
+      const visibleImages = Array.from(pair.querySelectorAll(".aplus-image"))
+        .filter((image) => !image.hidden);
+      pair.hidden = visibleImages.length === 0;
+      pair.classList.toggle("single", visibleImages.length === 1);
+    }
+
+    function refreshAplusCarousel(carousel) {
+      if (!carousel) return;
+      const slides = carousel.querySelectorAll(".aplus-slide");
+      const dots = carousel.querySelectorAll(".carousel-dot");
+      const controls = carousel.querySelectorAll(".carousel-control");
+      const visibleSlides = getVisibleSlides(carousel);
+
+      carousel.hidden = visibleSlides.length === 0;
+      carousel.classList.toggle("empty", visibleSlides.length === 0);
+      controls.forEach((control) => {
+        control.hidden = visibleSlides.length <= 1;
+      });
+      dots.forEach((dot, index) => {
+        dot.hidden = !slides[index] || slides[index].hidden;
+      });
+
+      if (!visibleSlides.length) return;
+
+      const current = Array.from(slides).findIndex((slide) => {
+        return slide.classList.contains("active") && !slide.hidden;
+      });
+      const activeIndex = current >= 0 ? current : visibleSlides[0].index;
+
+      slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === activeIndex);
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === activeIndex && !dot.hidden);
+      });
+    }
+
+    function refreshAplusLayout() {
+      document.querySelectorAll(".aplus-pair").forEach(refreshAplusPair);
+      document.querySelectorAll(".aplus-carousel").forEach(refreshAplusCarousel);
+    }
+
+    function handleMissingAplusImage(image) {
+      image.hidden = true;
+      refreshAplusPair(image.closest(".aplus-pair"));
+      refreshAplusCarousel(image.closest(".aplus-carousel"));
     }
 
     function setMobileSliderPosition(offset = 0, animate = true) {
@@ -1248,8 +1313,11 @@
     function setCarouselToFirst(carousel) {
       const slides = carousel.querySelectorAll(".aplus-slide");
       const dots = carousel.querySelectorAll(".carousel-dot");
-      slides.forEach((slide, index) => slide.classList.toggle("active", index === 0));
-      dots.forEach((dot, index) => dot.classList.toggle("active", index === 0));
+      const visibleSlides = getVisibleSlides(carousel);
+      const activeIndex = visibleSlides.length ? visibleSlides[0].index : -1;
+      slides.forEach((slide, index) => slide.classList.toggle("active", index === activeIndex));
+      dots.forEach((dot, index) => dot.classList.toggle("active", index === activeIndex && !dot.hidden));
+      refreshAplusCarousel(carousel);
     }
 
     function switchProduct(productKey) {
@@ -1268,6 +1336,7 @@
       updateImageSet(desktopCarouselImages, getAplusImages(product, 7, desktopCarouselImages.length));
       updateImageSet(mobileDirectImages, getAplusImages(product, 10, mobileDirectImages.length));
       updateImageSet(mobileCarouselImages, getAplusImages(product, 16, mobileCarouselImages.length));
+      refreshAplusLayout();
 
       productTabs.forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.product === productKey);
@@ -1293,6 +1362,11 @@
       tab.addEventListener("click", () => {
         switchProduct(tab.dataset.product);
       });
+    });
+
+    aplusImages.forEach((image) => {
+      image.addEventListener("error", () => handleMissingAplusImage(image));
+      image.addEventListener("load", () => refreshAplusLayout());
     });
 
     if (mainImageBox) {
@@ -1358,23 +1432,40 @@
       const nextButton = carousel.querySelector(".carousel-control.next");
 
       function showAplusSlide(index) {
-        const activeSlide = (index + slides.length) % slides.length;
+        const visibleSlides = getVisibleSlides(carousel);
+        if (!visibleSlides.length) {
+          refreshAplusCarousel(carousel);
+          return;
+        }
+        const visibleIndexes = visibleSlides.map((item) => item.index);
+        let activeSlide = Number.isFinite(index) ? index : visibleIndexes[0];
+        if (!visibleIndexes.includes(activeSlide)) {
+          const wrapped = ((index % visibleIndexes.length) + visibleIndexes.length) % visibleIndexes.length;
+          activeSlide = visibleIndexes[wrapped];
+        }
         slides.forEach((slide, slideIndex) => {
           slide.classList.toggle("active", slideIndex === activeSlide);
         });
         dots.forEach((dot, dotIndex) => {
-          dot.classList.toggle("active", dotIndex === activeSlide);
+          dot.classList.toggle("active", dotIndex === activeSlide && !dot.hidden);
         });
+        refreshAplusCarousel(carousel);
       }
 
       if (slides.length && dots.length && prevButton && nextButton) {
         prevButton.addEventListener("click", () => {
           const current = Array.from(slides).findIndex((slide) => slide.classList.contains("active"));
-          showAplusSlide(current - 1);
+          const visibleIndexes = getVisibleSlides(carousel).map((item) => item.index);
+          const currentVisible = visibleIndexes.indexOf(current);
+          const target = currentVisible <= 0 ? visibleIndexes[visibleIndexes.length - 1] : visibleIndexes[currentVisible - 1];
+          showAplusSlide(target);
         });
         nextButton.addEventListener("click", () => {
           const current = Array.from(slides).findIndex((slide) => slide.classList.contains("active"));
-          showAplusSlide(current + 1);
+          const visibleIndexes = getVisibleSlides(carousel).map((item) => item.index);
+          const currentVisible = visibleIndexes.indexOf(current);
+          const target = currentVisible < 0 || currentVisible >= visibleIndexes.length - 1 ? visibleIndexes[0] : visibleIndexes[currentVisible + 1];
+          showAplusSlide(target);
         });
         dots.forEach((dot) => {
           dot.addEventListener("click", () => showAplusSlide(Number(dot.dataset.slide)));
