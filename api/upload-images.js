@@ -67,7 +67,7 @@ function isAllowedImagePath(path) {
 
   if (isAplus) return number >= 1 && number <= 18;
   if (product === "A-GY25302US") return number >= 1 && number <= 7;
-  if (product === "C-GY25302US") return number >= 1 && number <= 6;
+  if (product === "C-GY25302US") return number >= 1 && number <= 7;
   return false;
 }
 
