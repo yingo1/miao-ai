@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -121,6 +121,31 @@
       border-color: #007185;
       box-shadow: inset 0 3px 0 #ff9900;
       font-weight: 700;
+    }
+
+    .admin-shortcut {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid #007185;
+      border-radius: 18px;
+      background: #fff;
+      color: #007185;
+      box-shadow: 0 2px 8px rgba(15, 17, 17, 0.16);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .admin-shortcut:hover {
+      background: #eef8fb;
+      text-decoration: none;
     }
 
     .page {
@@ -793,6 +818,10 @@
         padding: 0 12px;
       }
 
+      .admin-shortcut {
+        display: none;
+      }
+
       .product-tabs {
         padding: 10px 12px 0;
         overflow-x: auto;
@@ -893,6 +922,8 @@
   </style>
 </head>
 <body>
+  <a class="admin-shortcut" href="admin.html" aria-label="Open image admin page">图片后台</a>
+
   <header class="amazon-top" aria-label="Static Amazon-style header">
     <div class="brand-word">amazon</div>
     <div class="search-display" aria-hidden="true">
@@ -923,39 +954,39 @@
     <section class="product-layout">
       <aside class="thumbs" aria-label="Product image thumbnails">
         <button class="thumb active" data-index="0" aria-label="Show image 1">
-          <img src="images/A-GY25302US/1.jpg" alt="Product thumbnail 1" />
+          <img src="file:///E:/miao/A-GY25302US/1.jpg" alt="Product thumbnail 1" />
         </button>
         <button class="thumb" data-index="1" aria-label="Show image 2">
-          <img src="images/A-GY25302US/2.jpg" alt="Product thumbnail 2" />
+          <img src="file:///E:/miao/A-GY25302US/2.jpg" alt="Product thumbnail 2" />
         </button>
         <button class="thumb" data-index="2" aria-label="Show image 3">
-          <img src="images/A-GY25302US/3.jpg" alt="Product thumbnail 3" />
+          <img src="file:///E:/miao/A-GY25302US/3.jpg" alt="Product thumbnail 3" />
         </button>
         <button class="thumb" data-index="3" aria-label="Show image 4">
-          <img src="images/A-GY25302US/4.jpg" alt="Product thumbnail 4" />
+          <img src="file:///E:/miao/A-GY25302US/4.jpg" alt="Product thumbnail 4" />
         </button>
         <button class="thumb" data-index="4" aria-label="Show image 5">
-          <img src="images/A-GY25302US/5.jpg" alt="Product thumbnail 5" />
+          <img src="file:///E:/miao/A-GY25302US/5.jpg" alt="Product thumbnail 5" />
         </button>
         <button class="thumb" data-index="5" aria-label="Show image 6">
-          <img src="images/A-GY25302US/6.jpg" alt="Product thumbnail 6" />
+          <img src="file:///E:/miao/A-GY25302US/6.jpg" alt="Product thumbnail 6" />
         </button>
         <button class="thumb" data-index="6" aria-label="Show image 7">
-          <img src="images/A-GY25302US/7.jpg" alt="Product thumbnail 7" />
+          <img src="file:///E:/miao/A-GY25302US/7.jpg" alt="Product thumbnail 7" />
         </button>
       </aside>
 
       <section class="gallery-main">
         <div class="main-image-box">
-          <img id="mainImage" src="images/A-GY25302US/1.jpg" alt="Main product display" />
+          <img id="mainImage" src="file:///E:/miao/A-GY25302US/1.jpg" alt="Main product display" />
           <div class="mobile-main-slider" id="mobileMainSlider" aria-hidden="true">
-            <img class="mobile-main-slide" src="images/A-GY25302US/1.jpg" alt="" />
-            <img class="mobile-main-slide" src="images/A-GY25302US/2.jpg" alt="" />
-            <img class="mobile-main-slide" src="images/A-GY25302US/3.jpg" alt="" />
-            <img class="mobile-main-slide" src="images/A-GY25302US/4.jpg" alt="" />
-            <img class="mobile-main-slide" src="images/A-GY25302US/5.jpg" alt="" />
-            <img class="mobile-main-slide" src="images/A-GY25302US/6.jpg" alt="" />
-            <img class="mobile-main-slide" src="images/A-GY25302US/7.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/1.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/2.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/3.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/4.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/5.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/6.jpg" alt="" />
+            <img class="mobile-main-slide" src="file:///E:/miao/A-GY25302US/7.jpg" alt="" />
           </div>
         </div>
         <div class="full-view">Click to see full view</div>
@@ -1000,15 +1031,15 @@
           <div class="section-label">Color: <strong>Pleated fabric cover-3000K</strong></div>
           <div class="swatches">
             <button class="swatch active">
-              <img src="images/A-GY25302US/1.jpg" alt="Pleated fabric cover 3000K" />
+              <img src="file:///E:/miao/A-GY25302US/1.jpg" alt="Pleated fabric cover 3000K" />
               <div class="swatch-price">$14.99<br />Warm white</div>
             </button>
             <button class="swatch">
-              <img src="images/A-GY25302US/2.jpg" alt="Dusk to dawn sensor view" />
+              <img src="file:///E:/miao/A-GY25302US/2.jpg" alt="Dusk to dawn sensor view" />
               <div class="swatch-price">$14.99<br />Sensor</div>
             </button>
             <button class="swatch">
-              <img src="images/A-GY25302US/3.jpg" alt="Side view" />
+              <img src="file:///E:/miao/A-GY25302US/3.jpg" alt="Side view" />
               <div class="swatch-price">$14.99<br />Black base</div>
             </button>
           </div>
@@ -1135,18 +1166,18 @@
     <section class="product-description">
       <h2>Product description</h2>
       <div class="aplus-content aplus-desktop" aria-label="Product description images for desktop">
-        <img class="aplus-image" src="images/A-GY25302US/A+/1.jpg" alt="Product description image 1" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/2.jpg" alt="Product description image 2" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/3.jpg" alt="Product description image 3" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/4.jpg" alt="Product description image 4" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/1.jpg" alt="Product description image 1" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/2.jpg" alt="Product description image 2" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/3.jpg" alt="Product description image 3" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/4.jpg" alt="Product description image 4" />
         <div class="aplus-pair" aria-label="Product description side by side images">
-          <img class="aplus-image" src="images/A-GY25302US/A+/5.jpg" alt="Product description image 5" />
-          <img class="aplus-image" src="images/A-GY25302US/A+/6.jpg" alt="Product description image 6" />
+          <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/5.jpg" alt="Product description image 5" />
+          <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/6.jpg" alt="Product description image 6" />
         </div>
         <div class="aplus-carousel" aria-label="Product description carousel">
-          <img class="aplus-image aplus-slide active" src="images/A-GY25302US/A+/7.jpg" alt="Product description carousel image 7" />
-          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/8.jpg" alt="Product description carousel image 8" />
-          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/9.jpg" alt="Product description carousel image 9" />
+          <img class="aplus-image aplus-slide active" src="file:///E:/miao/A-GY25302US/A+/7.jpg" alt="Product description carousel image 7" />
+          <img class="aplus-image aplus-slide" src="file:///E:/miao/A-GY25302US/A+/8.jpg" alt="Product description carousel image 8" />
+          <img class="aplus-image aplus-slide" src="file:///E:/miao/A-GY25302US/A+/9.jpg" alt="Product description carousel image 9" />
           <button class="carousel-control prev" type="button" aria-label="Previous product description image">&#8249;</button>
           <button class="carousel-control next" type="button" aria-label="Next product description image">&#8250;</button>
           <div class="carousel-dots" aria-label="Carousel slide indicators">
@@ -1157,16 +1188,16 @@
         </div>
       </div>
       <div class="aplus-content aplus-mobile" aria-label="Product description images for mobile">
-        <img class="aplus-image" src="images/A-GY25302US/A+/10.jpg" alt="Mobile product description image 10" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/11.jpg" alt="Mobile product description image 11" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/12.jpg" alt="Mobile product description image 12" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/13.jpg" alt="Mobile product description image 13" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/14.jpg" alt="Mobile product description image 14" />
-        <img class="aplus-image" src="images/A-GY25302US/A+/15.jpg" alt="Mobile product description image 15" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/10.jpg" alt="Mobile product description image 10" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/11.jpg" alt="Mobile product description image 11" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/12.jpg" alt="Mobile product description image 12" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/13.jpg" alt="Mobile product description image 13" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/14.jpg" alt="Mobile product description image 14" />
+        <img class="aplus-image" src="file:///E:/miao/A-GY25302US/A+/15.jpg" alt="Mobile product description image 15" />
         <div class="aplus-carousel" aria-label="Mobile product description carousel">
-          <img class="aplus-image aplus-slide active" src="images/A-GY25302US/A+/16.jpg" alt="Mobile product description carousel image 16" />
-          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/17.jpg" alt="Mobile product description carousel image 17" />
-          <img class="aplus-image aplus-slide" src="images/A-GY25302US/A+/18.jpg" alt="Mobile product description carousel image 18" />
+          <img class="aplus-image aplus-slide active" src="file:///E:/miao/A-GY25302US/A+/16.jpg" alt="Mobile product description carousel image 16" />
+          <img class="aplus-image aplus-slide" src="file:///E:/miao/A-GY25302US/A+/17.jpg" alt="Mobile product description carousel image 17" />
+          <img class="aplus-image aplus-slide" src="file:///E:/miao/A-GY25302US/A+/18.jpg" alt="Mobile product description carousel image 18" />
           <button class="carousel-control prev" type="button" aria-label="Previous mobile product description image">&#8249;</button>
           <button class="carousel-control next" type="button" aria-label="Next mobile product description image">&#8250;</button>
           <div class="carousel-dots" aria-label="Mobile carousel slide indicators">
@@ -1182,12 +1213,12 @@
   <script>
     const productCatalog = {
       a: {
-        base: "images/A-GY25302US",
+        base: "file:///E:/miao/A-GY25302US",
         mainCount: 7,
         label: "A-GY25302US"
       },
       c: {
-        base: "images/C-GY25302US",
+        base: "file:///E:/miao/C-GY25302US",
         mainCount: 6,
         label: "C-GY25302US"
       }
@@ -1477,4 +1508,3 @@
   </script>
 </body>
 </html>
-
