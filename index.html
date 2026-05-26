@@ -1240,10 +1240,11 @@
     const mobileCarouselImages = document.querySelectorAll(".aplus-mobile .aplus-slide");
     const aplusImages = document.querySelectorAll(".product-description img");
 
+    const imageCacheVersion = Date.now();
+
     let activeProductKey = "a";
     let images = getMainImages(productCatalog[activeProductKey]);
     let activeProductImage = 0;
-    const imageCacheVersion = Date.now();
 
     function freshImageUrl(src) {
       return `${src}?v=${imageCacheVersion}`;
