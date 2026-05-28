@@ -66,8 +66,8 @@ function isAllowedImagePath(path) {
   const isAplus = path.includes("/A+/");
 
   if (isAplus) return number >= 1 && number <= 18;
-  if (product === "A-GY25302US") return number >= 1 && number <= 7;
-  if (product === "C-GY25302US") return number >= 1 && number <= 7;
+  if (product === "A-GY25302US") return number >= 1 && number <= 10;
+  if (product === "C-GY25302US") return number >= 1 && number <= 10;
   return false;
 }
 
