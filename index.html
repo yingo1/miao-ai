@@ -185,6 +185,8 @@
       cursor: pointer;
       display: grid;
       place-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
     .thumb img {
@@ -198,6 +200,19 @@
     .thumb.active {
       border: 2px solid #007185;
       box-shadow: 0 0 0 2px #c8f3fa;
+    }
+
+    .thumb-more-count {
+      position: absolute;
+      inset: 2px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.62);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     .gallery-main {
@@ -269,6 +284,160 @@
       width: 9px;
       height: 9px;
       background: #0f1111;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .product-gallery-modal[hidden] {
+      display: none !important;
+    }
+
+    .product-gallery-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+      background: rgba(0, 0, 0, 0.48);
+    }
+
+    .gallery-modal-card {
+      width: min(96vw, 1400px);
+      max-height: min(88vh, 820px);
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+
+    .gallery-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid #879596;
+      border-radius: 6px;
+      background: #fff;
+      color: #0f1111;
+      font-size: 28px;
+      line-height: 28px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .gallery-modal-tabs {
+      display: flex;
+      gap: 26px;
+      padding: 26px 56px 0;
+      border-bottom: 1px solid #d5d9d9;
+      color: #565959;
+      font-size: 14px;
+    }
+
+    .gallery-modal-tabs span {
+      padding: 0 0 10px;
+    }
+
+    .gallery-modal-tabs .active {
+      color: #0f1111;
+      border-bottom: 3px solid #007185;
+      font-weight: 700;
+    }
+
+    .gallery-modal-body {
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr) 320px;
+      gap: 34px;
+      padding: 16px 56px 20px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .gallery-modal-image-wrap {
+      display: grid;
+      place-items: center;
+      min-height: 520px;
+      background: #fff;
+    }
+
+    .gallery-modal-image {
+      max-width: 100%;
+      max-height: 68vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .gallery-modal-side h2 {
+      margin: 8px 0 12px;
+      font-size: 19px;
+      line-height: 1.25;
+      font-weight: 400;
+    }
+
+    .gallery-modal-meta {
+      color: #565959;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .gallery-modal-thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 54px);
+      gap: 12px;
+    }
+
+    .gallery-modal-thumb {
+      width: 54px;
+      height: 54px;
+      border: 1px solid #d5d9d9;
+      background: #fff;
+      padding: 3px;
+      cursor: pointer;
+    }
+
+    .gallery-modal-thumb.active {
+      border: 2px solid #007185;
+      box-shadow: 0 0 0 2px #c8f3fa;
+    }
+
+    .gallery-modal-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 0 16px;
+    }
+
+    .gallery-modal-nav,
+    .gallery-modal-page {
+      min-width: 34px;
+      height: 34px;
+      border: 1px solid #a2a6ac;
+      border-radius: 8px;
+      background: #f7fafa;
+      cursor: pointer;
+    }
+
+    .gallery-modal-page.active {
+      border-color: #007185;
+      background: #eef8fb;
+      font-weight: 700;
     }
 
     .info h1 {
@@ -889,6 +1058,43 @@
         display: flex;
       }
 
+      .product-gallery-modal {
+        padding: 12px;
+      }
+
+      .gallery-modal-card {
+        width: 100%;
+        max-height: 92vh;
+      }
+
+      .gallery-modal-tabs {
+        padding: 18px 48px 0 18px;
+      }
+
+      .gallery-modal-body {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 14px 18px 18px;
+      }
+
+      .gallery-modal-image-wrap {
+        min-height: 320px;
+      }
+
+      .gallery-modal-image {
+        max-height: 48vh;
+      }
+
+      .gallery-modal-thumbs {
+        grid-template-columns: repeat(5, 46px);
+        gap: 8px;
+      }
+
+      .gallery-modal-thumb {
+        width: 46px;
+        height: 46px;
+      }
+
       .info h1 {
         font-size: 21px;
       }
@@ -1210,16 +1416,44 @@
     </section>
   </main>
 
+  <div class="product-gallery-modal" id="productGalleryModal" role="dialog" aria-modal="true" aria-label="Product image gallery" hidden>
+    <div class="gallery-modal-card">
+      <button class="gallery-modal-close" type="button" aria-label="Close image gallery">&times;</button>
+      <div class="gallery-modal-tabs" aria-hidden="true">
+        <span>VIDEOS</span>
+        <span class="active">IMAGES</span>
+      </div>
+      <div class="gallery-modal-body">
+        <div class="gallery-modal-image-wrap">
+          <img class="gallery-modal-image" id="galleryModalImage" alt="Large product gallery image" />
+        </div>
+        <aside class="gallery-modal-side">
+          <h2 id="galleryModalTitle"></h2>
+          <div class="gallery-modal-meta">
+            <div>Color: Pleated fabric cover-3000K</div>
+            <div>Size: 1 Pack</div>
+          </div>
+          <div class="gallery-modal-thumbs" id="galleryModalThumbs" aria-label="All product images"></div>
+        </aside>
+      </div>
+      <div class="gallery-modal-footer">
+        <button class="gallery-modal-nav" id="galleryModalPrev" type="button" aria-label="Previous image">&#8249;</button>
+        <button class="gallery-modal-page active" id="galleryModalPage" type="button">1</button>
+        <button class="gallery-modal-nav" id="galleryModalNext" type="button" aria-label="Next image">&#8250;</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const productCatalog = {
       a: {
         base: "images/A-GY25302US",
-        mainCount: 7,
+        mainCount: 10,
         label: "图组1"
       },
       c: {
         base: "images/C-GY25302US",
-        mainCount: 7,
+        mainCount: 10,
         label: "图组2"
       }
     };
@@ -1239,12 +1473,26 @@
     const mobileDirectImages = document.querySelectorAll(".aplus-mobile > .aplus-image:not(.aplus-slide)");
     const mobileCarouselImages = document.querySelectorAll(".aplus-mobile .aplus-slide");
     const aplusImages = document.querySelectorAll(".product-description img");
+    const fullView = document.querySelector(".full-view");
+    const productGalleryModal = document.querySelector("#productGalleryModal");
+    const galleryModalImage = document.querySelector("#galleryModalImage");
+    const galleryModalTitle = document.querySelector("#galleryModalTitle");
+    const galleryModalThumbs = document.querySelector("#galleryModalThumbs");
+    const galleryModalPage = document.querySelector("#galleryModalPage");
+    const galleryModalClose = document.querySelector(".gallery-modal-close");
+    const galleryModalPrev = document.querySelector("#galleryModalPrev");
+    const galleryModalNext = document.querySelector("#galleryModalNext");
 
     const imageCacheVersion = Date.now();
+    const visibleGalleryLimit = 7;
+    const normalThumbLimit = 6;
 
     let activeProductKey = "a";
-    let images = getMainImages(productCatalog[activeProductKey]);
+    let allImages = getMainImages(productCatalog[activeProductKey]);
+    let images = getVisibleProductImages(allImages);
     let activeProductImage = 0;
+    let activeModalImage = 0;
+    let mainImageLoadRequest = 0;
 
     function freshImageUrl(src) {
       return `${src}?v=${imageCacheVersion}`;
@@ -1252,6 +1500,10 @@
 
     function getMainImages(product) {
       return Array.from({ length: product.mainCount }, (_, index) => freshImageUrl(`${product.base}/${index + 1}.jpg`));
+    }
+
+    function getVisibleProductImages(sourceImages) {
+      return sourceImages.slice(0, Math.min(sourceImages.length, visibleGalleryLimit));
     }
 
     function getAplusImages(product, start, count) {
@@ -1331,7 +1583,92 @@
       mobileSlider.style.transform = `translate3d(calc(${-activeProductImage * 100}% + ${offset}px), 0, 0)`;
     }
 
+    function checkProductImage(src) {
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.onload = () => resolve(src);
+        image.onerror = () => resolve(null);
+        image.src = src;
+      });
+    }
+
+    async function resolveAvailableProductImages(product) {
+      const candidates = getMainImages(product);
+      const checked = await Promise.all(candidates.map(checkProductImage));
+      return checked.filter(Boolean);
+    }
+
+    function refreshThumbMoreCount() {
+      thumbs.forEach((thumb) => {
+        thumb.classList.remove("more-open");
+        const badge = thumb.querySelector(".thumb-more-count");
+        if (badge) badge.remove();
+      });
+
+      const extraCount = allImages.length - normalThumbLimit;
+      const moreThumb = Array.from(thumbs).find((thumb) => Number(thumb.dataset.index) === normalThumbLimit);
+      if (extraCount <= 0 || !moreThumb || moreThumb.hidden || !images[normalThumbLimit]) return;
+
+      moreThumb.classList.add("more-open");
+      moreThumb.setAttribute("aria-label", `Open all ${allImages.length} product images`);
+      const badge = document.createElement("span");
+      badge.className = "thumb-more-count";
+      badge.textContent = `+${extraCount}`;
+      moreThumb.appendChild(badge);
+    }
+
+    function applyProductImageSet(nextImages, resetActive = false) {
+      allImages = nextImages.length ? nextImages : allImages;
+      images = getVisibleProductImages(allImages);
+      updateImageSet(thumbImages, images);
+      updateImageSet(mobileSlides, images);
+      updateImageSet(swatchImages, images.slice(0, swatchImages.length));
+      if (resetActive) activeProductImage = 0;
+      showProductImage(Math.min(activeProductImage, Math.max(images.length - 1, 0)), true);
+      renderGalleryModalThumbs();
+    }
+
+    function renderGalleryModalThumbs() {
+      if (!galleryModalThumbs) return;
+      galleryModalThumbs.replaceChildren();
+      allImages.forEach((src, index) => {
+        const button = document.createElement("button");
+        button.className = "gallery-modal-thumb";
+        button.type = "button";
+        button.setAttribute("aria-label", `Show image ${index + 1}`);
+        button.innerHTML = `<img src="${src}" alt="">`;
+        button.addEventListener("click", () => showModalImage(index));
+        galleryModalThumbs.appendChild(button);
+      });
+    }
+
+    function showModalImage(index) {
+      if (!allImages.length || !galleryModalImage) return;
+      activeModalImage = (index + allImages.length) % allImages.length;
+      galleryModalImage.src = allImages[activeModalImage];
+      galleryModalPage.textContent = String(activeModalImage + 1);
+      galleryModalThumbs.querySelectorAll(".gallery-modal-thumb").forEach((thumb, thumbIndex) => {
+        thumb.classList.toggle("active", thumbIndex === activeModalImage);
+      });
+    }
+
+    function openProductModal(index = activeProductImage) {
+      if (!productGalleryModal || !allImages.length) return;
+      galleryModalTitle.textContent = document.querySelector(".info h1").textContent.trim();
+      renderGalleryModalThumbs();
+      showModalImage(Math.min(index, allImages.length - 1));
+      productGalleryModal.hidden = false;
+      document.body.classList.add("modal-open");
+    }
+
+    function closeProductModal() {
+      if (!productGalleryModal) return;
+      productGalleryModal.hidden = true;
+      document.body.classList.remove("modal-open");
+    }
+
     function showProductImage(index, animate = true) {
+      if (!images.length) return;
       activeProductImage = (index + images.length) % images.length;
       mainImage.src = images[activeProductImage];
       thumbs.forEach((item) => {
@@ -1345,6 +1682,7 @@
         dot.classList.toggle("active", dotIndex === activeProductImage);
       });
       setMobileSliderPosition(0, animate);
+      refreshThumbMoreCount();
     }
 
     function setCarouselToFirst(carousel) {
@@ -1362,12 +1700,14 @@
       if (!product) return;
 
       activeProductKey = productKey;
-      images = getMainImages(product);
+      const loadRequest = ++mainImageLoadRequest;
       activeProductImage = 0;
-
-      updateImageSet(thumbImages, images);
-      updateImageSet(mobileSlides, images);
-      updateImageSet(swatchImages, images.slice(0, swatchImages.length));
+      applyProductImageSet(getMainImages(product), true);
+      resolveAvailableProductImages(product).then((availableImages) => {
+        if (loadRequest === mainImageLoadRequest && availableImages.length) {
+          applyProductImageSet(availableImages, true);
+        }
+      });
       updateImageSet(desktopDirectImages, getAplusImages(product, 1, desktopDirectImages.length));
       updateImageSet(desktopPairImages, getAplusImages(product, 5, desktopPairImages.length));
       updateImageSet(desktopCarouselImages, getAplusImages(product, 7, desktopCarouselImages.length));
@@ -1385,6 +1725,10 @@
 
     thumbs.forEach((thumb) => {
       thumb.addEventListener("click", () => {
+        if (thumb.classList.contains("more-open")) {
+          openProductModal(normalThumbLimit);
+          return;
+        }
         showProductImage(Number(thumb.dataset.index));
       });
     });
@@ -1393,6 +1737,35 @@
       dot.addEventListener("click", () => {
         showProductImage(Number(dot.dataset.index));
       });
+    });
+
+    if (fullView) {
+      fullView.addEventListener("click", () => openProductModal(activeProductImage));
+    }
+
+    if (galleryModalClose) {
+      galleryModalClose.addEventListener("click", closeProductModal);
+    }
+
+    if (galleryModalPrev) {
+      galleryModalPrev.addEventListener("click", () => showModalImage(activeModalImage - 1));
+    }
+
+    if (galleryModalNext) {
+      galleryModalNext.addEventListener("click", () => showModalImage(activeModalImage + 1));
+    }
+
+    if (productGalleryModal) {
+      productGalleryModal.addEventListener("click", (event) => {
+        if (event.target === productGalleryModal) closeProductModal();
+      });
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (!productGalleryModal || productGalleryModal.hidden) return;
+      if (event.key === "Escape") closeProductModal();
+      if (event.key === "ArrowLeft") showModalImage(activeModalImage - 1);
+      if (event.key === "ArrowRight") showModalImage(activeModalImage + 1);
     });
 
     productTabs.forEach((tab) => {
@@ -1411,6 +1784,12 @@
       let touchStartY = 0;
       let touchDeltaX = 0;
       let isHorizontalSwipe = false;
+      let suppressGalleryClick = false;
+
+      mainImageBox.addEventListener("click", () => {
+        if (suppressGalleryClick) return;
+        openProductModal(activeProductImage);
+      });
 
       mainImageBox.addEventListener("touchstart", (event) => {
         touchStartX = event.changedTouches[0].clientX;
@@ -1443,6 +1822,10 @@
         const threshold = Math.min(90, slideWidth * 0.18);
 
         if (isHorizontalSwipe && Math.abs(diffX) > threshold && Math.abs(diffX) > Math.abs(diffY)) {
+          suppressGalleryClick = true;
+          window.setTimeout(() => {
+            suppressGalleryClick = false;
+          }, 250);
           showProductImage(activeProductImage + (diffX < 0 ? 1 : -1), true);
         } else {
           showProductImage(activeProductImage, true);
