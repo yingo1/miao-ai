@@ -58,7 +58,7 @@ function normalizePath(path) {
 }
 
 function isAllowedImagePath(path) {
-  const match = path.match(/^images\/(A-GY25302US|C-GY25302US)(?:\/A\+)?\/(\d+)\.jpg$/);
+  const match = path.match(/^images\/(A-GY25302US|C-GY25302US|G3-GY25302US)(?:\/A\+)?\/(\d+)\.jpg$/);
   if (!match) return false;
 
   const product = match[1];
@@ -68,6 +68,7 @@ function isAllowedImagePath(path) {
   if (isAplus) return number >= 1 && number <= 24;
   if (product === "A-GY25302US") return number >= 1 && number <= 10;
   if (product === "C-GY25302US") return number >= 1 && number <= 10;
+  if (product === "G3-GY25302US") return number >= 1 && number <= 10;
   return false;
 }
 
