@@ -104,6 +104,14 @@ function validateImageBody(body) {
   };
 }
 
+function validateImagePathBody(body) {
+  const path = normalizePath(body.path);
+  if (!isAllowedImagePath(path)) {
+    throw httpError(400, "The file path is not allowed.");
+  }
+  return { path };
+}
+
 async function getExistingFileSha({ owner, repo, branch, path, token }) {
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeRepoPath(path)}?ref=${encodeURIComponent(branch)}`;
   const response = await fetch(url, {
@@ -156,6 +164,37 @@ async function writeGithubFile({ owner, repo, branch, path, contentBase64, token
   return data;
 }
 
+async function deleteGithubFile({ owner, repo, branch, path, token }) {
+  const sha = await getExistingFileSha({ owner, repo, branch, path, token });
+  if (!sha) {
+    return { deleted: false };
+  }
+
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeRepoPath(path)}`;
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "User-Agent": "miao-ai-image-admin"
+    },
+    body: JSON.stringify({
+      message: `Delete ${path}`,
+      branch,
+      sha
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw httpError(response.status, data.message || "Failed to delete the GitHub file.");
+  }
+
+  return data;
+}
+
 module.exports = async function handler(req, res) {
   setCors(req, res);
 
@@ -181,6 +220,28 @@ module.exports = async function handler(req, res) {
     const repo = process.env.GITHUB_REPO || "miao-ai";
     const branch = process.env.GITHUB_BRANCH || "main";
     const body = await readRequestBody(req);
+    const action = String(body.action || "upload").toLowerCase();
+
+    if (action === "delete") {
+      const image = validateImagePathBody(body);
+      const result = await deleteGithubFile({
+        owner,
+        repo,
+        branch,
+        path: image.path,
+        token
+      });
+
+      res.status(200).json({
+        ok: true,
+        action: "delete",
+        path: image.path,
+        deleted: result.deleted !== false,
+        commitSha: result.commit && result.commit.sha
+      });
+      return;
+    }
+
     const image = validateImageBody(body);
     const result = await writeGithubFile({
       owner,
