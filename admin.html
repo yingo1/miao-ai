@@ -511,6 +511,7 @@
       <div class="product-tabs" aria-label="Product tabs">
         <button class="product-tab active" type="button" data-product="a">&#22270;&#32452;1</button>
         <button class="product-tab" type="button" data-product="c">&#22270;&#32452;2</button>
+        <button class="product-tab" type="button" data-product="g3">&#22270;&#32452;3</button>
       </div>
 
       <div class="summary" aria-live="polite">
@@ -578,6 +579,11 @@
       c: {
         label: "\u56fe\u7ec42",
         folder: "C-GY25302US",
+        mainCount: 10
+      },
+      g3: {
+        label: "\u56fe\u7ec43",
+        folder: "G3-GY25302US",
         mainCount: 10
       }
     };
@@ -676,7 +682,8 @@
 
     const state = {
       a: createEmptyProductState(),
-      c: createEmptyProductState()
+      c: createEmptyProductState(),
+      g3: createEmptyProductState()
     };
 
     const objectUrls = [];
