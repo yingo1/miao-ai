@@ -321,9 +321,9 @@
       border: 1px solid #d5d9d9;
       border-radius: 7px;
       background: #fff;
-      min-height: 206px;
+      min-height: 246px;
       display: grid;
-      grid-template-rows: auto 112px auto auto;
+      grid-template-rows: auto 112px auto auto auto;
       overflow: hidden;
     }
 
@@ -406,6 +406,35 @@
       background: #fbfbfb;
     }
 
+    .slot-actions {
+      padding: 8px 9px 10px;
+      border-top: 1px solid #edf0f0;
+      background: #fff;
+    }
+
+    .slot-file-button {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 32px;
+      border: 1px solid #007185;
+      border-radius: 6px;
+      color: #007185;
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .slot-file-button input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
     .guide-list {
       margin: 0;
       padding-left: 20px;
@@ -451,8 +480,8 @@
       }
 
       .slot {
-        min-height: 190px;
-        grid-template-rows: auto 96px auto auto;
+        min-height: 228px;
+        grid-template-rows: auto 96px auto auto auto;
       }
     }
   </style>
@@ -467,7 +496,7 @@
     <section class="panel hero">
       <div>
         <h1>&#25209;&#37327;&#25972;&#29702;&#32593;&#31449;&#22270;&#29255;</h1>
-        <p class="muted">&#36873;&#25321;&#20135;&#21697;&#21518;&#65292;&#20998;&#21035;&#19978;&#20256;&#20027;&#22270;&#12289;PC &#31471; Product description &#22270;&#29255;&#12289;&#25163;&#26426;&#31471; Product description &#22270;&#29255;&#12290;&#21518;&#21488;&#20250;&#33258;&#21160;&#25353;&#32593;&#31449;&#38656;&#35201;&#30340;&#25991;&#20214;&#21517;&#25972;&#29702;&#65292;&#24182;&#23548;&#20986;&#19968;&#20010; GitHub &#19978;&#20256;&#21253;&#12290;</p>
+        <p class="muted">选择产品后，按产品主图、PC 端 A+ 详情图、移动端 A+ 详情图分组上传。后台会自动按网站需要的文件名整理，并导出一个 GitHub 上传包。</p>
         <div class="notice">&#35828;&#26126;&#65306;&#36825;&#20010;&#39029;&#38754;&#19981;&#20250;&#30452;&#25509;&#20889;&#20837; GitHub&#12290;&#23427;&#20250;&#24110;&#20320;&#29983;&#25104;&#27491;&#30830;&#21629;&#21517;&#30340;&#22270;&#29255;&#21253;&#65292;&#35299;&#21387;&#21518;&#20877;&#19978;&#20256;&#21040; GitHub &#23545;&#24212;&#25991;&#20214;&#22841;&#21363;&#21487;&#12290;</div>
       </div>
       <div class="actions">
@@ -490,8 +519,8 @@
           <div class="summary-label">&#24403;&#21069;&#20135;&#21697;&#24050;&#36873;&#25321;&#22270;&#29255;</div>
         </div>
         <div class="summary-card">
-          <div class="summary-number" id="missingCount">25</div>
-          <div class="summary-label">&#24403;&#21069;&#20135;&#21697;&#32570;&#23569;&#22270;&#29255;</div>
+          <div class="summary-number" id="missingCount">34</div>
+          <div class="summary-label">&#24403;&#21069;&#20135;&#21697;&#21097;&#20313;&#31354;&#20301;</div>
         </div>
         <div class="summary-card">
           <div class="summary-number" id="packageCount">0</div>
@@ -566,32 +595,88 @@
         }
       },
       {
-        key: "pcAplus",
-        title: "2. PC \u7aef Product description",
-        description: "\u7528\u4e8e\u7535\u8111\u7aef\u8be6\u60c5\u56fe\u3002\u9700\u8981 9 \u5f20\u56fe\uff0c\u81ea\u52a8\u547d\u540d\u4e3a A+ \u6587\u4ef6\u5939\u91cc\u7684 1.jpg \u5230 9.jpg\u3002",
+        key: "pcAplusFull",
+        title: "2. PC Product description - \u5b8c\u6574\u56fe\u7247\u76f4\u63a5\u5c55\u793a",
+        description: "\u7528\u4e8e PC \u7aef A+ \u8be6\u60c5\u56fe\u7684\u5b8c\u6574\u5355\u5f20\u5c55\u793a\uff0c\u5bf9\u5e94 A+ \u6587\u4ef6\u5939 1-7.jpg\u3002",
         targets(product) {
-          return Array.from({ length: 9 }, (_, index) => ({
-            fileName: `${index + 1}.jpg`,
-            path: `images/${product.folder}/A+/${index + 1}.jpg`
+          return [1, 2, 3, 4, 5, 6, 7].map((number) => ({
+            fileName: `${number}.jpg`,
+            path: `images/${product.folder}/A+/${number}.jpg`
           }));
         }
       },
       {
-        key: "mobileAplus",
-        title: "3. \u624b\u673a\u7aef Product description",
-        description: "\u7528\u4e8e\u624b\u673a\u7aef\u8be6\u60c5\u56fe\u3002\u9700\u8981 9 \u5f20\u56fe\uff0c\u81ea\u52a8\u547d\u540d\u4e3a A+ \u6587\u4ef6\u5939\u91cc\u7684 10.jpg \u5230 18.jpg\u3002",
+        key: "pcAplusPair",
+        title: "3. PC Product description - \u4e24\u5f20\u56fe\u7247\u5e76\u6392\u5c55\u793a",
+        description: "\u7528\u4e8e PC \u7aef A+ \u8be6\u60c5\u56fe\u4e24\u5f20\u5e76\u6392\u5c55\u793a\uff0c\u5bf9\u5e94 A+ \u6587\u4ef6\u5939 8.jpg \u548c 9.jpg\u3002\u8fd9\u4e2a\u677f\u5757\u53ef\u4ee5\u4e3a\u7a7a\u3002",
         targets(product) {
-          return Array.from({ length: 9 }, (_, index) => ({
-            fileName: `${index + 10}.jpg`,
-            path: `images/${product.folder}/A+/${index + 10}.jpg`
+          return [8, 9].map((number) => ({
+            fileName: `${number}.jpg`,
+            path: `images/${product.folder}/A+/${number}.jpg`
+          }));
+        }
+      },
+      {
+        key: "pcAplusCarousel",
+        title: "4. PC Product description - \u56fe\u7247\u8f6e\u64ad\u5c55\u793a",
+        description: "\u7528\u4e8e PC \u7aef A+ \u8be6\u60c5\u56fe\u8f6e\u64ad\u5c55\u793a\uff0c\u5bf9\u5e94 A+ \u6587\u4ef6\u5939 10-12.jpg\u3002\u8fd9\u4e2a\u677f\u5757\u53ef\u4ee5\u4e3a\u7a7a\u3002",
+        targets(product) {
+          return [10, 11, 12].map((number) => ({
+            fileName: `${number}.jpg`,
+            path: `images/${product.folder}/A+/${number}.jpg`
+          }));
+        }
+      },
+      {
+        key: "mobileAplusFull",
+        title: "5. \u79fb\u52a8\u7aef Product description - \u5b8c\u6574\u56fe\u7247\u76f4\u63a5\u5c55\u793a",
+        description: "\u7528\u4e8e\u79fb\u52a8\u7aef A+ \u8be6\u60c5\u56fe\u7684\u5b8c\u6574\u5355\u5f20\u5c55\u793a\uff0c\u5bf9\u5e94 A+ \u6587\u4ef6\u5939 13-19.jpg\u3002",
+        targets(product) {
+          return [13, 14, 15, 16, 17, 18, 19].map((number) => ({
+            fileName: `${number}.jpg`,
+            path: `images/${product.folder}/A+/${number}.jpg`
+          }));
+        }
+      },
+      {
+        key: "mobileAplusPair",
+        title: "6. \u79fb\u52a8\u7aef Product description - PC \u5e76\u6392\u6a21\u5757\u7684\u79fb\u52a8\u56fe",
+        description: "\u5bf9\u5e94 A+ \u6587\u4ef6\u5939 20.jpg \u548c 21.jpg\u3002\u79fb\u52a8\u7aef\u4f1a\u4e0a\u4e0b\u5355\u5f20\u5b8c\u6574\u5c55\u793a\uff0c\u4e0d\u5e76\u6392\u3002\u8fd9\u4e2a\u677f\u5757\u53ef\u4ee5\u4e3a\u7a7a\u3002",
+        targets(product) {
+          return [20, 21].map((number) => ({
+            fileName: `${number}.jpg`,
+            path: `images/${product.folder}/A+/${number}.jpg`
+          }));
+        }
+      },
+      {
+        key: "mobileAplusCarousel",
+        title: "7. \u79fb\u52a8\u7aef Product description - \u56fe\u7247\u8f6e\u64ad\u5c55\u793a",
+        description: "\u7528\u4e8e\u79fb\u52a8\u7aef A+ \u8be6\u60c5\u56fe\u8f6e\u64ad\u5c55\u793a\uff0c\u5bf9\u5e94 A+ \u6587\u4ef6\u5939 22-24.jpg\u3002\u8fd9\u4e2a\u677f\u5757\u53ef\u4ee5\u4e3a\u7a7a\u3002",
+        targets(product) {
+          return [22, 23, 24].map((number) => ({
+            fileName: `${number}.jpg`,
+            path: `images/${product.folder}/A+/${number}.jpg`
           }));
         }
       }
     ];
 
+    function createEmptyProductState() {
+      return {
+        main: [],
+        pcAplusFull: [],
+        pcAplusPair: [],
+        pcAplusCarousel: [],
+        mobileAplusFull: [],
+        mobileAplusPair: [],
+        mobileAplusCarousel: []
+      };
+    }
+
     const state = {
-      a: { main: [], pcAplus: [], mobileAplus: [] },
-      c: { main: [], pcAplus: [], mobileAplus: [] }
+      a: createEmptyProductState(),
+      c: createEmptyProductState()
     };
 
     const objectUrls = [];
@@ -642,8 +727,26 @@
       render();
     }
 
+    function countSelectedFiles(files, targetCount) {
+      return files.slice(0, targetCount).filter(Boolean).length;
+    }
+
+    function setSlotFile(productKey, groupKey, index, files) {
+      const sortedFiles = sortFiles(files);
+      const file = sortedFiles[0];
+      const targets = getTargets(productKey, groupKey);
+      if (!file || index < 0 || index >= targets.length) return;
+
+      const nextFiles = state[productKey][groupKey].slice(0, targets.length);
+      while (nextFiles.length <= index) nextFiles.push(null);
+      nextFiles[index] = file;
+      state[productKey][groupKey] = nextFiles;
+      statusText.textContent = `${products[productKey].label} \u5df2\u66ff\u6362 ${targets[index].path}\u3002`;
+      render();
+    }
+
     function clearProduct(productKey) {
-      state[productKey] = { main: [], pcAplus: [], mobileAplus: [] };
+      state[productKey] = createEmptyProductState();
       statusText.textContent = `${products[productKey].label} \u5df2\u6e05\u7a7a\u3002`;
       render();
     }
@@ -656,7 +759,7 @@
       groups.forEach((group) => {
         const targetCount = group.targets(product).length;
         required += targetCount;
-        selected += Math.min(state[activeProductKey][group.key].length, targetCount);
+        selected += countSelectedFiles(state[activeProductKey][group.key], targetCount);
       });
 
       return {
@@ -699,7 +802,7 @@
       const product = products[activeProductKey];
       const targets = group.targets(product);
       const files = state[activeProductKey][group.key];
-      const selected = Math.min(files.length, targets.length);
+      const selected = countSelectedFiles(files, targets.length);
       const missing = Math.max(0, targets.length - selected);
 
       const card = document.createElement("article");
@@ -709,7 +812,7 @@
           <div>
             <div class="upload-title">${group.title}</div>
             <div class="upload-desc">${group.description}</div>
-            <div class="upload-desc">\u5f53\u524d\u9700\u8981 ${targets.length} \u5f20\uff0c\u5df2\u9009\u62e9 ${selected} \u5f20\uff0c\u7f3a\u5c11 ${missing} \u5f20\u3002</div>
+            <div class="upload-desc">\u6700\u591a\u53ef\u4ee5\u4e0a\u4f20 ${targets.length} \u5f20\uff0c\u5df2\u9009\u62e9 ${selected} \u5f20\uff0c\u5269\u4f59\u7a7a\u4f4d ${missing} \u4e2a\u3002</div>
           </div>
           <div class="upload-controls">
             <label class="file-button">
@@ -748,6 +851,12 @@
           <div class="slot-preview">${preview}</div>
           <div class="source-name">${file ? file.name : "\u8fd8\u6ca1\u6709\u9009\u62e9\u56fe\u7247"}</div>
           <div class="target-path">${target.path}</div>
+          <div class="slot-actions">
+            <label class="slot-file-button">
+              ${file ? "\u66f4\u6362\u8fd9\u5f20" : "\u4e0a\u4f20\u8fd9\u5f20"}
+              <input type="file" accept="image/*" data-replace-group="${group.key}" data-replace-index="${index}">
+            </label>
+          </div>
         `;
         slotGrid.appendChild(slot);
       });
@@ -777,6 +886,13 @@
       document.querySelectorAll("input[type='file'][data-group]").forEach((input) => {
         input.addEventListener("change", () => {
           setGroupFiles(activeProductKey, input.dataset.group, input.files);
+          input.value = "";
+        });
+      });
+
+      document.querySelectorAll("input[type='file'][data-replace-group]").forEach((input) => {
+        input.addEventListener("change", () => {
+          setSlotFile(activeProductKey, input.dataset.replaceGroup, Number(input.dataset.replaceIndex), input.files);
           input.value = "";
         });
       });
