@@ -231,12 +231,49 @@
       border: 1px solid #f0f2f2;
       position: relative;
       touch-action: pan-y;
+      cursor: zoom-in;
     }
 
     .main-image-box img {
       width: 100%;
       height: 100%;
       object-fit: contain;
+      display: block;
+    }
+
+    .main-zoom-lens {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 42%;
+      height: 42%;
+      border: 1px solid rgba(0, 113, 133, 0.55);
+      background: rgba(154, 202, 255, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+      transform: translate3d(-9999px, -9999px, 0);
+      transition: opacity 80ms ease;
+    }
+
+    .main-zoom-lens.active {
+      opacity: 1;
+    }
+
+    .main-zoom-preview {
+      position: fixed;
+      z-index: 90;
+      display: none;
+      border: 1px solid #a2a6ac;
+      background-color: #fff;
+      background-repeat: no-repeat;
+      box-shadow: 0 3px 14px rgba(15, 17, 17, 0.32);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .main-zoom-preview.active {
       display: block;
     }
 
@@ -366,6 +403,9 @@
       place-items: center;
       min-height: 520px;
       background: #fff;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
     }
 
     .gallery-modal-image {
@@ -373,6 +413,22 @@
       max-height: 68vh;
       object-fit: contain;
       display: block;
+      transform-origin: var(--modal-zoom-x, 50%) var(--modal-zoom-y, 50%);
+      transition: transform 180ms ease;
+    }
+
+    .gallery-modal-image-wrap.zoomed {
+      height: min(72vh, 700px);
+      cursor: zoom-out;
+    }
+
+    .gallery-modal-image-wrap.zoomed .gallery-modal-image {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      object-fit: cover;
+      transform: scale(1.55);
     }
 
     .gallery-modal-side h2 {
@@ -1001,6 +1057,15 @@
 
       .main-image-box {
         display: block;
+        cursor: pointer;
+      }
+
+      .main-zoom-lens,
+      .main-zoom-lens.active,
+      .main-zoom-preview,
+      .main-zoom-preview.active {
+        display: none !important;
+        opacity: 0 !important;
       }
 
       .mobile-main-slider {
@@ -1055,6 +1120,10 @@
 
       .gallery-modal-image-wrap {
         min-height: 320px;
+      }
+
+      .gallery-modal-image-wrap.zoomed {
+        height: 52vh;
       }
 
       .gallery-modal-image {
@@ -1171,7 +1240,9 @@
             <img class="mobile-main-slide" src="images/A-GY25302US/6.jpg" alt="" />
             <img class="mobile-main-slide" src="images/A-GY25302US/7.jpg" alt="" />
           </div>
+          <div class="main-zoom-lens" id="mainZoomLens" aria-hidden="true"></div>
         </div>
+        <div class="main-zoom-preview" id="mainZoomPreview" aria-hidden="true"></div>
         <div class="full-view">Click to see full view</div>
         <div class="mobile-gallery-dots" aria-label="Product image indicators">
           <button class="mobile-gallery-dot active" type="button" data-index="0" aria-label="Show product image 1"></button>
@@ -1443,6 +1514,8 @@
 
     const mainImage = document.querySelector("#mainImage");
     const mainImageBox = document.querySelector(".main-image-box");
+    const mainZoomLens = document.querySelector("#mainZoomLens");
+    const mainZoomPreview = document.querySelector("#mainZoomPreview");
     const mobileSlider = document.querySelector("#mobileMainSlider");
     const thumbs = document.querySelectorAll(".thumb");
     const thumbImages = document.querySelectorAll(".thumb img");
@@ -1459,6 +1532,7 @@
     const fullView = document.querySelector(".full-view");
     const productGalleryModal = document.querySelector("#productGalleryModal");
     const galleryModalImage = document.querySelector("#galleryModalImage");
+    const galleryModalImageWrap = document.querySelector(".gallery-modal-image-wrap");
     const galleryModalTitle = document.querySelector("#galleryModalTitle");
     const galleryModalThumbs = document.querySelector("#galleryModalThumbs");
     const galleryModalClose = document.querySelector(".gallery-modal-close");
@@ -1597,6 +1671,68 @@
       moreThumb.appendChild(badge);
     }
 
+    function hideMainZoom() {
+      if (mainZoomLens) mainZoomLens.classList.remove("active");
+      if (mainZoomPreview) mainZoomPreview.classList.remove("active");
+    }
+
+    function updateMainZoom(event) {
+      if (!mainImageBox || !mainImage || !mainZoomLens || !mainZoomPreview) return;
+      if (event.pointerType === "touch" || window.innerWidth <= 760 || !mainImage.naturalWidth) {
+        hideMainZoom();
+        return;
+      }
+
+      if (mainZoomPreview.parentElement !== document.body) {
+        document.body.appendChild(mainZoomPreview);
+      }
+
+      const boxRect = mainImageBox.getBoundingClientRect();
+      const pointerX = Math.max(0, Math.min(boxRect.width, event.clientX - boxRect.left));
+      const pointerY = Math.max(0, Math.min(boxRect.height, event.clientY - boxRect.top));
+      const xRatio = boxRect.width ? pointerX / boxRect.width : 0.5;
+      const yRatio = boxRect.height ? pointerY / boxRect.height : 0.5;
+      const lensWidth = Math.min(Math.max(boxRect.width * 0.42, 180), boxRect.width);
+      const lensHeight = Math.min(Math.max(boxRect.height * 0.42, 180), boxRect.height);
+      const lensLeft = Math.max(0, Math.min(boxRect.width - lensWidth, pointerX - lensWidth / 2));
+      const lensTop = Math.max(0, Math.min(boxRect.height - lensHeight, pointerY - lensHeight / 2));
+      const previewWidth = Math.min(760, Math.max(520, window.innerWidth * 0.42));
+      const previewHeight = Math.min(650, Math.max(420, boxRect.height));
+      const previewLeft = Math.min(boxRect.right + 16, window.innerWidth - previewWidth - 12);
+      const previewTop = Math.max(12, Math.min(boxRect.top, window.innerHeight - previewHeight - 12));
+      const zoomScale = Math.max(2.2, previewWidth / Math.max(boxRect.width, 1), previewHeight / Math.max(boxRect.height, 1));
+
+      mainZoomLens.style.width = `${lensWidth}px`;
+      mainZoomLens.style.height = `${lensHeight}px`;
+      mainZoomLens.style.transform = `translate3d(${lensLeft}px, ${lensTop}px, 0)`;
+      mainZoomLens.classList.add("active");
+
+      mainZoomPreview.style.width = `${previewWidth}px`;
+      mainZoomPreview.style.height = `${previewHeight}px`;
+      mainZoomPreview.style.left = `${Math.max(12, previewLeft)}px`;
+      mainZoomPreview.style.top = `${previewTop}px`;
+      mainZoomPreview.style.backgroundImage = `url("${mainImage.currentSrc || mainImage.src}")`;
+      mainZoomPreview.style.backgroundSize = `${boxRect.width * zoomScale}px ${boxRect.height * zoomScale}px`;
+      mainZoomPreview.style.backgroundPosition = `${previewWidth / 2 - xRatio * boxRect.width * zoomScale}px ${previewHeight / 2 - yRatio * boxRect.height * zoomScale}px`;
+      mainZoomPreview.classList.add("active");
+    }
+
+    function resetModalZoom() {
+      if (!galleryModalImageWrap) return;
+      galleryModalImageWrap.classList.remove("zoomed");
+      galleryModalImageWrap.style.setProperty("--modal-zoom-x", "50%");
+      galleryModalImageWrap.style.setProperty("--modal-zoom-y", "50%");
+    }
+
+    function setModalZoomPoint(event) {
+      if (!galleryModalImageWrap) return;
+      const rect = galleryModalImageWrap.getBoundingClientRect();
+      const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / Math.max(rect.width, 1)) * 100));
+      const y = Math.max(0, Math.min(100, ((event.clientY - rect.top) / Math.max(rect.height, 1)) * 100));
+      galleryModalImageWrap.style.setProperty("--modal-zoom-x", `${x}%`);
+      galleryModalImageWrap.style.setProperty("--modal-zoom-y", `${y}%`);
+    }
+
     function applyProductImageSet(nextImages, resetActive = false) {
       allImages = nextImages.length ? nextImages : allImages;
       images = getVisibleProductImages(allImages);
@@ -1624,6 +1760,7 @@
 
     function showModalImage(index) {
       if (!allImages.length || !galleryModalImage) return;
+      resetModalZoom();
       activeModalImage = (index + allImages.length) % allImages.length;
       galleryModalImage.src = allImages[activeModalImage];
       galleryModalThumbs.querySelectorAll(".gallery-modal-thumb").forEach((thumb, thumbIndex) => {
@@ -1633,6 +1770,7 @@
 
     function openProductModal(index = activeProductImage) {
       if (!productGalleryModal || !allImages.length) return;
+      hideMainZoom();
       galleryModalTitle.textContent = document.querySelector(".info h1").textContent.trim();
       renderGalleryModalThumbs();
       showModalImage(Math.min(index, allImages.length - 1));
@@ -1642,6 +1780,7 @@
 
     function closeProductModal() {
       if (!productGalleryModal) return;
+      resetModalZoom();
       productGalleryModal.hidden = true;
       document.body.classList.remove("modal-open");
     }
@@ -1649,6 +1788,7 @@
     function showProductImage(index, animate = true) {
       if (!images.length) return;
       activeProductImage = (index + images.length) % images.length;
+      hideMainZoom();
       mainImage.src = images[activeProductImage];
       thumbs.forEach((item) => {
         const itemIndex = Number(item.dataset.index);
@@ -1732,6 +1872,20 @@
       });
     }
 
+    if (galleryModalImageWrap) {
+      galleryModalImageWrap.addEventListener("click", (event) => {
+        if (!productGalleryModal || productGalleryModal.hidden) return;
+        setModalZoomPoint(event);
+        galleryModalImageWrap.classList.toggle("zoomed");
+      });
+
+      galleryModalImageWrap.addEventListener("pointermove", (event) => {
+        if (galleryModalImageWrap.classList.contains("zoomed")) {
+          setModalZoomPoint(event);
+        }
+      });
+    }
+
     document.addEventListener("keydown", (event) => {
       if (!productGalleryModal || productGalleryModal.hidden) return;
       if (event.key === "Escape") closeProductModal();
@@ -1760,7 +1914,13 @@
         openProductModal(activeProductImage);
       });
 
+      mainImageBox.addEventListener("pointerenter", updateMainZoom);
+      mainImageBox.addEventListener("pointermove", updateMainZoom);
+      mainImageBox.addEventListener("pointerleave", hideMainZoom);
+      mainImageBox.addEventListener("pointercancel", hideMainZoom);
+
       mainImageBox.addEventListener("touchstart", (event) => {
+        hideMainZoom();
         touchStartX = event.changedTouches[0].clientX;
         touchStartY = event.changedTouches[0].clientY;
         touchDeltaX = 0;
