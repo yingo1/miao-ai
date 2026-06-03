@@ -1093,6 +1093,33 @@
       });
     }
 
+    function getMainClearPaths(entries) {
+      const productKeys = new Set(
+        entries
+          .filter((entry) => entry.groupKey === "main")
+          .map((entry) => entry.productKey)
+      );
+
+      return Array.from(productKeys).flatMap((productKey) => {
+        const product = products[productKey];
+        if (!product) return [];
+        return Array.from({ length: product.mainCount }, (_, index) => `images/${product.folder}/${index + 1}.jpg`);
+      });
+    }
+
+    function getClearSummary(mainClearPaths, aplusClearPaths) {
+      if (mainClearPaths.length && aplusClearPaths.length) {
+        return "\u8fd9\u4f1a\u5148\u6e05\u7a7a\u672c\u6b21\u6709\u4e0a\u4f20\u7684\u56fe\u7ec4\u65e7\u4e3b\u56fe\u548c A+ \u65e7\u56fe\uff0c\u518d\u6309\u8fd9\u6b21\u9009\u62e9\u7684\u56fe\u7247\u91cd\u65b0\u5199\u56de GitHub\u3002\u786e\u8ba4\u7ee7\u7eed\u5417\uff1f";
+      }
+      if (mainClearPaths.length) {
+        return "\u8fd9\u4f1a\u5148\u6e05\u7a7a\u672c\u6b21\u6709\u4e0a\u4f20\u7684\u56fe\u7ec4\u65e7\u4e3b\u56fe\uff0c\u518d\u6309\u8fd9\u6b21\u9009\u62e9\u7684\u4e3b\u56fe\u91cd\u65b0\u5199\u56de GitHub\u3002\u786e\u8ba4\u7ee7\u7eed\u5417\uff1f";
+      }
+      if (aplusClearPaths.length) {
+        return "\u8fd9\u4f1a\u5148\u6e05\u7a7a\u672c\u6b21\u6709\u4e0a\u4f20\u7684\u56fe\u7ec4 A+ \u65e7\u56fe\uff0c\u518d\u6309\u8fd9\u6b21\u9009\u62e9\u7684 A+ \u56fe\u7247\u91cd\u65b0\u5199\u56de GitHub\u3002\u786e\u8ba4\u7ee7\u7eed\u5417\uff1f";
+      }
+      return "\u8fd9\u4f1a\u628a\u5df2\u9009\u56fe\u7247\u5199\u56de GitHub\uff0c\u5e76\u8986\u76d6\u4ed3\u5e93\u91cc\u7684\u540c\u540d\u56fe\u7247\u3002\u786e\u8ba4\u7ee7\u7eed\u5417\uff1f";
+    }
+
     async function sendBackendRequest(endpoint, password, body) {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -1130,22 +1157,22 @@
         return;
       }
 
+      const mainClearPaths = getMainClearPaths(entries);
       const aplusClearPaths = getAplusClearPaths(entries);
-      const confirmed = window.confirm(aplusClearPaths.length
-        ? "\u8fd9\u4f1a\u5148\u6e05\u7a7a\u5f53\u524d\u56fe\u7ec4\u7684 A+ \u65e7\u56fe\uff0c\u518d\u628a\u8fd9\u6b21\u9009\u62e9\u7684\u56fe\u7247\u5199\u56de GitHub\u3002\u786e\u8ba4\u7ee7\u7eed\u5417\uff1f"
-        : "\u8fd9\u4f1a\u628a\u5df2\u9009\u56fe\u7247\u5199\u56de GitHub\uff0c\u5e76\u8986\u76d6\u4ed3\u5e93\u91cc\u7684\u540c\u540d\u56fe\u7247\u3002\u786e\u8ba4\u7ee7\u7eed\u5417\uff1f");
+      const clearPaths = [...mainClearPaths, ...aplusClearPaths];
+      const confirmed = window.confirm(getClearSummary(mainClearPaths, aplusClearPaths));
       if (!confirmed) return;
 
       pushToGithub.disabled = true;
       githubProgress.hidden = false;
-      githubProgress.max = aplusClearPaths.length + entries.length;
+      githubProgress.max = clearPaths.length + entries.length;
       githubProgress.value = 0;
 
       try {
         let finishedSteps = 0;
 
-        for (const path of aplusClearPaths) {
-          backendStatus.textContent = `\u6b63\u5728\u6e05\u7406 A+ \u65e7\u56fe ${finishedSteps + 1}/${githubProgress.max}\uff1a${path}`;
+        for (const path of clearPaths) {
+          backendStatus.textContent = `\u6b63\u5728\u6e05\u7406\u65e7\u56fe ${finishedSteps + 1}/${githubProgress.max}\uff1a${path}`;
           await sendBackendRequest(endpoint, password, {
             action: "delete",
             path
